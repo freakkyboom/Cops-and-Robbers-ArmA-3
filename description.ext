@@ -1,0 +1,39 @@
+/*
+    Mission configuration für das Cops‑and‑Robbers‑Framework.
+    Dieses File wird von Arma 3 beim Laden einer Mission eingelesen und
+    definiert grundlegende Parameter wie Respawnverhalten, Missionstitel
+    und verfügbarere Funktionsdateien.  Diese Vorlage ist bewusst
+    minimalistisch gehalten und kann beliebig angepasst und erweitert
+    werden.  Kommentare sind auf Deutsch, die SQF‑Syntax selbst
+    orientiert sich am Standard von Bohemia Interactive.
+
+    Die in diesem Repository enthaltenen Beispiele basieren auf
+    allgemein dokumentierten Mechaniken der Arma 3 Missionserstellung.
+    Der Bohemia‑Guide erklärt, dass Missionen in überschaubare
+    „Tasks“ (Aufgaben) aufgeteilt werden sollten und dass Aufgaben
+    verschiedene Zustände wie „created“, „assigned“, „succeeded“ oder
+    „failed“ haben【176927070815116†L340-L404】.  Dieses Framework nutzt
+    diese Konzepte, um klare Ziele für Räuber und Polizisten zu
+    definieren.
+*/
+
+author      = "Modder";
+onLoadName  = "Cops and Robbers";
+onLoadMission = "Grundgerüst für einen Cops‑and‑Robbers‑Spielmodus";
+loadScreen  = "\A3\ui_f\data\map_backgrounds\background_terrain_ca.paa";
+
+// Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten (siehe editor‑Marker)
+respawn            = 3;        // 3 = BASE: Respawn an Marker mit dem Namen "respawn_west" usw.
+respawnDelay       = 10;
+respawnTemplates[] = {"MenuPosition"};
+
+// Grundlegende Missionsparameter
+class Header
+{
+    gameType   = "COOP";   // Koop‑Szenario; bei Bedarf ändern
+    minPlayers = 2;
+    maxPlayers = 40;
+};
+
+// Verweise auf zusätzliche Konfigurationsdateien
+#include "CfgFunctions.hpp"
