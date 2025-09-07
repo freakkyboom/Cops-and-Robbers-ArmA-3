@@ -1,0 +1,114 @@
+version=53;
+class EditorData
+{
+    moveGridStep=1;
+    angleGridStep=0.2617994;
+    scaleGridStep=1;
+    autoGroupingDist=10;
+    toggles=1;
+    class ItemIDProvider
+    {
+        nextID=3;
+    };
+};
+class Mission
+{
+    addOns[]=
+    {
+        "A3_Characters_F_BLUFOR",
+        "A3_Characters_F_INDEP",
+        "A3_Characters_F_Common",
+        "A3_Map_Malden"
+    };
+    addOnsAuto[]=
+    {
+        "A3_Characters_F_BLUFOR",
+        "A3_Characters_F_INDEP",
+        "A3_Characters_F_Common",
+        "A3_Map_Malden"
+    };
+    randomSeed=123456;
+    class Entities
+    {
+        items=2;
+        class Item0
+        {
+            dataType="Group";
+            side="West";
+            class Entities
+            {
+                items=1;
+                class Item0
+                {
+                    dataType="Object";
+                    class PositionInfo
+                    {
+                        position[]={8585.9,47.6,2514.0};
+                        angles[]={0,0,0};
+                    };
+                    side="West";
+                    vehicle="B_Soldier_F";
+                    player="PLAYER";
+                    leader=1;
+                    skill=0.6;
+                };
+            };
+        };
+        class Item1
+        {
+            dataType="Group";
+            side="Guer";
+            class Entities
+            {
+                items=1;
+                class Item0
+                {
+                    dataType="Object";
+                    class PositionInfo
+                    {
+                        position[]={8591.9,47.6,2514.0};
+                        angles[]={0,0,0};
+                    };
+                    side="Guer";
+                    vehicle="I_Soldier_F";
+                    player="PLAY CDG";
+                    leader=1;
+                    skill=0.6;
+                };
+            };
+        };
+    };
+    class Intel
+    {
+        timeOfChanges=1800;
+        startWeather=0.3;
+        startWind=0.1;
+        startGust=0;
+        forecastWeather=0.3;
+        forecastWind=0.1;
+        forecastGust=0;
+        year=2035;
+        month=6;
+        day=24;
+        hour=12;
+        minute=0;
+    };
+};
+class Intro
+{
+    addOns[]={};
+    addOnsAuto[]={};
+    randomSeed=0;
+};
+class OutroWin
+{
+    addOns[]={};
+    addOnsAuto[]={};
+    randomSeed=0;
+};
+class OutroLoose
+{
+    addOns[]={};
+    addOnsAuto[]={};
+    randomSeed=0;
+};
