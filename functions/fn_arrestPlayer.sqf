@@ -20,8 +20,8 @@ if (side _caller != west) exitWith
 {
     hint "Nur Polizisten können Räuber verhaften!";
 };
-// Nur Räuber können verhaftet werden
-if (side _target != east) exitWith
+// Nur Räuber (INDEPENDENT) können verhaftet werden
+if (side _target != resistance) exitWith
 {
     hint "Ziel ist kein Räuber.";
 };
@@ -47,7 +47,7 @@ hint "Räuber wurde verhaftet!";
 [] spawn
 {
     sleep 5;
-    private _remaining = {side _x == east && isPlayer _x && !(_x getVariable ["CR_arrested", false])} count allUnits;
+    private _remaining = {side _x == resistance && isPlayer _x && !(_x getVariable ["CR_arrested", false])} count allUnits;
     if (_remaining == 0) then
     {
         [] call CR_fnc_endMission;

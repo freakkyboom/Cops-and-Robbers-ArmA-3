@@ -25,4 +25,5 @@ if (isServer) then
 if (hasInterface) then
 {
     [] call CR_fnc_assignTasks;
+    [] call CR_fnc_addRPInteractions;
 };

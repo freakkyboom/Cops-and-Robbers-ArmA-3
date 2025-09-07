@@ -21,6 +21,8 @@ class CfgFunctions
             class pickupLoot      {};
             class arrestPlayer    {};
             class endMission      {};
+            class addRPInteractions {};
+            class showID         {};
         };
     };
 };

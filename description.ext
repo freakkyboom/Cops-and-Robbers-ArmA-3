@@ -18,8 +18,8 @@
 */
 
 author      = "Modder";
-onLoadName  = "Cops and Robbers";
-onLoadMission = "Grundgerüst für einen Cops‑and‑Robbers‑Spielmodus";
+onLoadName  = "Cops and Robbers - Malden";
+onLoadMission = "Grundgerüst für einen Cops‑and‑Robbers‑Spielmodus auf Malden";
 loadScreen  = "\A3\ui_f\data\map_backgrounds\background_terrain_ca.paa";
 
 // Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten (siehe editor‑Marker)
