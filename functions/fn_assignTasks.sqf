@@ -46,9 +46,9 @@ switch (side player) do
             "Nehmt die Räuber fest oder neutralisiert sie.", 
             "Räuber festnehmen", "Festnahme", _bankPos] call _createTask;
     };
-    case east:
+    case resistance:
     {
-        // Räuber: Tresor plündern und Beute wegschaffen
+        // Räuber (INDEPENDENT): Tresor plündern und Beute wegschaffen
         CR_robberTask1 = [_playerSide, "CR_RobBank", 
             "Knackt den Tresor in der Bank und stehlt das Geld.", 
             "Bank ausrauben", "Raub", _bankPos] call _createTask;

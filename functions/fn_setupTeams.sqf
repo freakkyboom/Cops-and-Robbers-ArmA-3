@@ -6,7 +6,7 @@
     Für dieses Framework gehen wir davon aus, dass im Editor zwei
     Marker namens "police_spawn" und "robber_spawn" existieren.  Alle
     spielbaren Einheiten auf der Seite BLUFOR (west) gelten als
-    Polizisten, während OPFOR (east) die Räuber darstellen.  Die
+    Polizisten, während INDEPENDENT (resistance) die Räuber darstellen.  Die
     Einheiten werden an ihre entsprechenden Spawnpunkte versetzt und
     erhalten einfache Waffen.
 */
@@ -32,7 +32,7 @@ private _robberSpawn = getMarkerPos "robber_spawn";
                 _x addMagazine "30Rnd_9x21_Mag_SMG_02";
                 _x addItemToUniform "ACE_EarPlugs";
             };
-            case east:
+            case resistance:
             {
                 _x setPosATL _robberSpawn;
                 _x removeAllWeapons;
