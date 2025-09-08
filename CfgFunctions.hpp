@@ -34,6 +34,17 @@ class CfgFunctions
             class addArsenalAction {};
             class openArsenal   {};
             class addGarageActions {};
+
+            // Neue Funktionen für Safehouse- und Task-Logik
+            class clearCopMarkers {};
+            class assignInterceptTask {};
+            class assignSafehouseTask {};
+            class addLaptopAction {};
+            class postGasRobbery {};
+            class safehouseSuccess {};
+            class finishSafehouseRobber {};
+            class finishSafehouseCops {};
+            class robberyPreventedCops {};
           };
       };
   };

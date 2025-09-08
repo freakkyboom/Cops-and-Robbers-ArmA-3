@@ -18,13 +18,25 @@ switch (side player) do
 {
     case west:
     {
-        CR_copTask1 = ["CR_Respond", "Reagiere auf Alarme und verhindere Raubüberfälle.",
-            "Raubüberfälle verhindern", "Cops", getMarkerPos "cop_spawn"] call _createTask;
+        // Standardaufgabe für Polizisten: auf Streife gehen
+        CR_copTaskPatrol = [
+            "CR_Patrol",
+            "Streife fahren, auf Auffälligkeiten achten.",
+            "Streife fahren",
+            "Cops",
+            getMarkerPos "cop_spawn"
+        ] call _createTask;
     };
     case civilian:
     {
-        CR_robTask1 = ["CR_RobTargets", "Raube Tankstellen, ATMs oder den Tresor aus.",
-            "Raubzüge durchführen", "Raub", getMarkerPos "robber_spawn"] call _createTask;
+        // Grundaufgabe für Räuber: geeignete Ziele auskundschaften
+        CR_robTaskRob = [
+            "CR_RobTargets",
+            "Raube Tankstellen, ATMs oder den Tresor aus.",
+            "Raubzüge durchführen",
+            "Raub",
+            getMarkerPos "robber_spawn"
+        ] call _createTask;
     };
     default {};
 };

@@ -35,9 +35,8 @@ _duration = 60;
     ["Der Tresor ist offen! Schnapp dir die Beute!", "PLAIN", 3] remoteExec ["BIS_fnc_showNotification", [civilian, west]];
 };
 
-// Task‑Status aktualisieren: RobberTask1 auf „Succeeded“ setzen und RobberTask2 zuweisen
-if (!isNil "CR_robberTask1") then
+// Task‑Status aktualisieren: Grundaufgabe der Räuber als erledigt markieren
+if (!isNil "CR_robTaskRob") then
 {
-    CR_robberTask1 setTaskState "Succeeded";
-    CR_robberTask2 setTaskState "Assigned";
+    CR_robTaskRob setTaskState "Succeeded";
 };

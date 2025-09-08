@@ -36,9 +36,9 @@ if ((player distance _target) > 3) exitWith
 _target disableAI "MOVE";
 _target playActionNow "Surrender";
 _target setCaptive true;
-// Task des Räubers als fehlgeschlagen markieren
-if (!isNil "CR_robberTask1") then { CR_robberTask1 setTaskState "Failed"; };
-if (!isNil "CR_robberTask2") then { CR_robberTask2 setTaskState "Failed"; };
+// Tasks des Räubers als fehlgeschlagen markieren
+if (!isNil "CR_robTaskRob") then { CR_robTaskRob setTaskState "Failed"; };
+if (!isNil "CR_robTaskSafehouse") then { CR_robTaskSafehouse setTaskState "Failed"; };
 
 // Polizist erhält eine Erfolgsmeldung
 hint "Räuber wurde verhaftet!";
