@@ -31,10 +31,11 @@ if (!(_target getVariable ["CR_loot", false])) exitWith
 _target attachTo [_caller, [0, 0.4, -0.1], "Spine3"];
 _target setVariable ["CR_lootCarrier", _caller, true];
 
-// Task‑Status aktualisieren
-if (!isNil "CR_robberTask2") then
+// Task‑Status aktualisieren: Safehouse-Aufgabe aktivieren, falls vorhanden
+if (!isNil "CR_robTaskSafehouse") then
 {
-    CR_robberTask2 setTaskState "Assigned";
+    CR_robTaskSafehouse setTaskState "Assigned";
 };
 
-hint "Du hast die Beute aufgenommen! Bringe sie zur Fluchtzone.";
+  hint "Du hast die Beute aufgenommen! Bringe sie zur Fluchtzone.";
+

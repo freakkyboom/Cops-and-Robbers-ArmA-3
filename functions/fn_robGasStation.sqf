@@ -22,11 +22,13 @@ if (!hasInterface) exitWith {};
         // fertig
         params ["_target", "_caller"];
         [_target] remoteExec ["CR_fnc_spawnGasLoot", 2];
+        [getPos _target] remoteExec ["CR_fnc_postGasRobbery", 2];
     },
     {
         // abgebrochen
         params ["_target", "_caller"];
         _target setVariable ["robbed", false, true];
+        [] remoteExec ["CR_fnc_robberyPreventedCops", west];
     },
     "Tankstelle wird ausgeraubt...",
     _target,
