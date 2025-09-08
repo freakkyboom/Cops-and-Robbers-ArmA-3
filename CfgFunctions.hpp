@@ -20,9 +20,15 @@ class CfgFunctions
             class startRobbery    {};
             class pickupLoot      {};
             class arrestPlayer    {};
-            class endMission      {};
             class addRPInteractions {};
+
+            class initRobberyTargets {};
+            class addRobberyActions {};
+            class triggerAlarm   {};
+            class notifyCops     {};
+            class spawnVehicle   {};
             class showID         {};
+            class addVehicleSpawner {};
         };
     };
 };

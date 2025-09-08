@@ -3,20 +3,19 @@
     Zweck: Gibt Räubern die Möglichkeit, den Geldsack aufzunehmen.
     Beim Aufnehmen der Beute wird der Gegenstand an den Spieler
     angeheftet (attached) und der Task‑Status wird angepasst.
-    Danach kann der Spieler zur Fluchtzone fahren/laufen.  Sobald
-    er dort ankommt, endet die Mission.
+    Danach kann der Spieler zur Fluchtzone fahren/laufen.
 
     Voraussetzungen: Der Geldsack muss die Variable "CR_loot" besitzen.
     Diese wird in startRobbery.sqf gesetzt.  Außerdem muss im Editor
     ein Trigger oder eine Logik in der Fluchtzone existieren, die
-    `CR_fnc_endMission` aufruft, wenn ein Räuber mit dem Loot diese
-    Zone betritt.
+    einen weiteren Ablauf (z. B. Verkauf) auslöst, wenn ein Räuber mit dem
+    Loot die Zone betritt.
 */
 
 params ["_target", "_caller", "_actionId", "_arguments"];
 
-// Nur Räuber (INDEPENDENT) dürfen die Beute aufnehmen
-if (side _caller != resistance) exitWith
+// Nur Räuber (civilian) dürfen die Beute aufnehmen
+if (side _caller != civilian) exitWith
 {
     hint "Nur Räuber können die Beute aufnehmen!";
 };

@@ -37,3 +37,11 @@ class Header
 
 // Verweise auf zusätzliche Konfigurationsdateien
 #include "CfgFunctions.hpp"
+
+class CfgPatches
+{
+    class CopsAndRobbers_Mission
+    {
+        requiredAddons[] = {"cba_main", "ace_main", "task_force_radio"};
+    };
+};
