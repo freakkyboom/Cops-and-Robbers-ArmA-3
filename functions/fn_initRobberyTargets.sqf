@@ -21,10 +21,18 @@ if (!isServer) exitWith {};
     };
 } forEach allMissionObjects "All";
 
+
 // 2) Tresor zufällig im Marker 'vault_area'
 private _center = getMarkerPos "vault_area";
 private _size   = getMarkerSize "vault_area";
 if (_center isEqualTo [0,0,0]) exitWith { diag_log "CR: Marker 'vault_area' fehlt."; };
+
+
+// 2) Tresor zufällig im Marker 'vault_area'
+private _center = getMarkerPos "vault_area";
+private _size   = getMarkerSize "vault_area";
+if (_center isEqualTo [0,0,0]) exitWith { diag_log "CR: Marker 'vault_area' fehlt."; };
+
 
 private _pos = [
     (_center # 0) + (random (_size # 0 * 2) - (_size # 0)),
@@ -34,4 +42,3 @@ private _pos = [
 private _vault = "Land_Safe_F" createVehicle _pos;
 _vault setVariable ["CR_target", "vault", true];
 [_vault] remoteExec ["CR_fnc_addRobberyActions", 0, true];
-
