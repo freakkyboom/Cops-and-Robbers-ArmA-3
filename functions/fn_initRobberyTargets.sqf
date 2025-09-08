@@ -1,50 +1,37 @@
 /*
-    Funktion: CR_fnc_initRobberyTargets
-    Zweck:    Sucht in der mission.sqm nach benannten Zielen und
-              statte sie mit ACE-Raubaktionen aus.
-              Unterstützte Präfixe:
-                - gas_station_* für Tankstellen-NPCs
-                - atm_*         für Geldautomaten
-
-    Diese Funktion wird nur auf dem Server ausgeführt.
+    CR_fnc_initRobberyTargets
+    - Sucht alle Missionsobjekte nach Präfixen ab und stattet sie mit ACE-Raubaktionen aus.
+    - Präfixe: gas_station_*, atm_*
+    - Spawnt 1 Tresor zufällig im Marker 'vault_area'
 */
-
 if (!isServer) exitWith {};
 
-// Alle Objektvariablen sammeln
-private _vars = allVariables missionNamespace;
-
-// Tankstellen (NPCs)
+// 1) Gas-Station & ATM: per Präfix finden und kennzeichnen
 {
-    private _obj = missionNamespace getVariable [_x, objNull];
-    if (!isNull _obj) then {
-        _obj setVariable ["CR_target", "gas", true];
-        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    private _name = vehicleVarName _x;
+
+    if (_name find "gas_station_" == 0) then {
+        _x setVariable ["CR_target", "gas", true];
+        [_x] remoteExec ["CR_fnc_addRobberyActions", 0, true];
     };
 
-} forEach _allObjects;
-
-
-} forEach (_vars select { _x find "gas_station_" == 0 });
-
-// Geldautomaten (platzierte Objekte)
-{
-    private _obj = missionNamespace getVariable [_x, objNull];
-    if (!isNull _obj) then {
-        _obj setVariable ["CR_target", "atm", true];
-        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    if (_name find "atm_" == 0) then {
+        _x setVariable ["CR_target", "atm", true];
+        [_x] remoteExec ["CR_fnc_addRobberyActions", 0, true];
     };
-} forEach (_vars select { _x find "atm_" == 0 });
+} forEach allMissionObjects "All";
 
-// Tresor zufällig innerhalb des Bereichs platzieren
-private _areaCenter = getMarkerPos "vault_area";
-private _areaSize   = getMarkerSize "vault_area";
-private _vaultPos = [
-    (_areaCenter select 0) + (random ((_areaSize select 0) * 2) - (_areaSize select 0)),
-    (_areaCenter select 1) + (random ((_areaSize select 1) * 2) - (_areaSize select 1)),
+// 2) Tresor zufällig im Marker 'vault_area'
+private _center = getMarkerPos "vault_area";
+private _size   = getMarkerSize "vault_area";
+if (_center isEqualTo [0,0,0]) exitWith { diag_log "CR: Marker 'vault_area' fehlt."; };
+
+private _pos = [
+    (_center # 0) + (random (_size # 0 * 2) - (_size # 0)),
+    (_center # 1) + (random (_size # 1 * 2) - (_size # 1)),
     0
 ];
-private _vault = "Land_Safe_F" createVehicle _vaultPos;
+private _vault = "Land_Safe_F" createVehicle _pos;
 _vault setVariable ["CR_target", "vault", true];
-[_vault] remoteExec ["CR_fnc_addRobberyActions", 0, _vault];
+[_vault] remoteExec ["CR_fnc_addRobberyActions", 0, true];
 

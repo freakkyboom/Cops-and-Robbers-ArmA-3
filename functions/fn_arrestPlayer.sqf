@@ -36,6 +36,7 @@ if ((player distance _target) > 3) exitWith
 _target disableAI "MOVE";
 _target playActionNow "Surrender";
 _target setCaptive true;
+_target setVariable ["CR_arrested", true, true];
 // Tasks des Räubers als fehlgeschlagen markieren
 if (!isNil "CR_robTaskRob") then { CR_robTaskRob setTaskState "Failed"; };
 if (!isNil "CR_robTaskSafehouse") then { CR_robTaskSafehouse setTaskState "Failed"; };
