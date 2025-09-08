@@ -14,7 +14,7 @@ if (!isServer) exitWith {};
 // Prüfen, ob ein Räuber den Geldsack erfolgreich zur Fluchtzone gebracht hat
 private _lootDelivered = false;
 {
-    if (side _x == resistance && isPlayer _x) then
+    if (side _x == civilian && isPlayer _x) then
     {
         if (_x getVariable ["CR_lootDelivered", false]) then
         {

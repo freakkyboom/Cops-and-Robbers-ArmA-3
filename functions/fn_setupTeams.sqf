@@ -1,61 +1,65 @@
 /*
     Funktion: CR_fnc_setupTeams
-    Zweck: Erzeugt Polizisten‑ und Räuber‑Teams, weist ihnen
-    spawnpunkte zu und stattet sie mit Basisausrüstung aus.
-
-    Für dieses Framework gehen wir davon aus, dass im Editor zwei
-    Marker namens "police_spawn" und "robber_spawn" existieren.  Alle
-    spielbaren Einheiten auf der Seite BLUFOR (west) gelten als
-    Polizisten, während INDEPENDENT (resistance) die Räuber darstellen.  Die
-    Einheiten werden an ihre entsprechenden Spawnpunkte versetzt und
-    erhalten einfache Waffen.
+    Zweck: Erzeugt Polizisten- und Räuber-Teams, weist ihnen Spawnpunkte zu
+    und richtet Arsenal sowie Fahrzeug-Spawner ein.
+    Benötigte Marker:
+        cop_spawn, robber_spawn,
+        cop_arsenal, robber_arsenal,
+        cop_vehicle_spawn, robber_vehicle_spawn
 */
 
 if (!isServer) exitWith {};
 
-private _policeSpawn = getMarkerPos "police_spawn";
+private _copSpawn    = getMarkerPos "cop_spawn";
 private _robberSpawn = getMarkerPos "robber_spawn";
 
 {
-    // Spieler nur einmal initialisieren
     if (isPlayer _x) then
     {
         switch (side _x) do
         {
             case west:
             {
-                _x setPosATL _policeSpawn;
-                // Beispielhafte Ausrüstung: Waffe, Magazin, Handschellen
+                _x setPosATL _copSpawn;
                 _x removeAllWeapons;
                 _x removeAllItems;
                 _x addWeapon "SMG_05_F";
                 _x addMagazine "30Rnd_9x21_Mag_SMG_02";
-                _x addItemToUniform "ACE_EarPlugs";
             };
-            case resistance:
+            case civilian:
             {
                 _x setPosATL _robberSpawn;
                 _x removeAllWeapons;
                 _x removeAllItems;
                 _x addWeapon "hgun_PDW2000_F";
                 _x addMagazine "30Rnd_9x21_Mag";
-                _x addItemToUniform "ACE_EarPlugs";
             };
             default
             {
-                // neutrale/fraktionslose Spieler erscheinen bei den Räubern
                 _x setPosATL _robberSpawn;
             };
         };
     };
 } forEach allUnits;
 
-// Fahrzeuge spawnen (optional): Polizeiauto und Fluchtfahrzeug
-private _policeCar = "C_Offroad_01_F" createVehicle (_policeSpawn vectorAdd [5,5,0]);
-_policeCar setDir 90;
+// Arsenal-Kisten
+private _copArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "cop_arsenal");
+[_copArsenal] call BIS_fnc_addVirtualArsenalCargo;
 
-private _getawayCar = "C_SUV_01_F" createVehicle (_robberSpawn vectorAdd [5,-5,0]);
-_getawayCar setDir 270;
+private _robberArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "robber_arsenal");
+[_robberArsenal] call BIS_fnc_addVirtualArsenalCargo;
 
-// Marker für Bank und Fluchtzone sind in initServer.sqf im Editor angelegt
-// Weitere Logik (z.B. Alarmanlage) wird in startRobbery.sqf implementiert
+// Fahrzeug-Spawner
+private _copPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "cop_vehicle_spawn");
+[_copPad, ["Fahrzeug spawnen", {
+    params ["_target", "_caller"];
+    if (side _caller != west) exitWith {};
+    ["C_Offroad_01_F", getPos _target, direction _target] remoteExec ["CR_fnc_spawnVehicle", 2];
+}]] remoteExec ["addAction", 0, _copPad];
+
+private _robberPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "robber_vehicle_spawn");
+[_robberPad, ["Fahrzeug spawnen", {
+    params ["_target", "_caller"];
+    if (side _caller != civilian) exitWith {};
+    ["C_SUV_01_F", getPos _target, direction _target] remoteExec ["CR_fnc_spawnVehicle", 2];
+}]] remoteExec ["addAction", 0, _robberPad];
