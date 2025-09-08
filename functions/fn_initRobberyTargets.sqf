@@ -1,7 +1,7 @@
 /*
     Funktion: CR_fnc_initRobberyTargets
     Zweck: Initialisiert Tankstellen, Geldautomaten und einen zufälligen Tresor.
-    Bei Interaktion oder Näherung wird ein Alarm ausgelöst.
+    Bei Interaktion wird ein Alarm ausgelöst.
 */
 
 if (!isServer) exitWith {};
@@ -34,20 +34,5 @@ private _vaultPos = [
 ];
 private _vault = "Land_Safe_F" createVehicle _vaultPos;
 _vault setVariable ["CR_target", "vault", true];
+[_vault] remoteExec ["CR_fnc_addRobberyActions", 0, _vault];
 
-// Tresor näherungsüberwachung
-[_vault] spawn
-{
-    params ["_safe"];
-    while {alive _safe} do
-    {
-        {
-            if (side _x == civilian && {_x distance _safe < 2} && !(_safe getVariable ["alarm", false])) then
-            {
-                _safe setVariable ["alarm", true, true];
-                [getPos _safe, "Ein Tresor wird geknackt!"] call CR_fnc_triggerAlarm;
-            };
-        } forEach allPlayers;
-        sleep 1;
-    };
-};
