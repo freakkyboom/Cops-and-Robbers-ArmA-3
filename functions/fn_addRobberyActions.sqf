@@ -3,8 +3,7 @@
     Zweck: Fügt einem Zielobjekt die passenden Aktionen für Räuber hinzu.
     Wird vom Server für jedes Ziel per remoteExec auf alle Clients aufgerufen.
     Die Zielobjekte stammen aus der mission.sqm und werden in
-    CR_fnc_initRobberyTargets anhand ihres Namens (gas_station_* oder atm_*)
-    bzw. als erzeugter Tresor vorbereitet.
+
     Parameter:
         0: OBJECT - Zielobjekt
 */
