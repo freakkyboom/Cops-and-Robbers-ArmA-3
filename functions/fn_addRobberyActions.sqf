@@ -2,6 +2,9 @@
     Funktion: CR_fnc_addRobberyActions
     Zweck: Fügt einem Zielobjekt die passenden Aktionen für Räuber hinzu.
     Wird vom Server für jedes Ziel per remoteExec auf alle Clients aufgerufen.
+    Die Zielobjekte stammen aus der mission.sqm und werden in
+    CR_fnc_initRobberyTargets anhand ihres Namens (gas_station_*, ATM_*,
+    tresor) vorbereitet.
     Parameter:
         0: OBJECT - Zielobjekt
 */
@@ -43,6 +46,23 @@ switch (_type) do
                 if (_target getVariable ["robbed", false]) exitWith { hint "Bereits geknackt"; };
                 _target setVariable ["robbed", true, true];
                 [getPos _target, "Ein ATM wird geknackt!"] remoteExec ["CR_fnc_triggerAlarm", 2];
+            },
+            { true }
+        ] call ace_interact_menu_fnc_createAction;
+        [_obj, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
+    };
+    case "vault":
+    {
+        private _action = [
+            "robVault",
+            "Tresor knacken",
+            "",
+            {
+                params ["_target", "_player", "_args"];
+                if (side _player != civilian) exitWith {};
+                if (_target getVariable ["robbed", false]) exitWith { hint "Bereits geknackt"; };
+                _target setVariable ["robbed", true, true];
+                [getPos _target, "Ein Tresor wird geknackt!"] remoteExec ["CR_fnc_triggerAlarm", 2];
             },
             { true }
         ] call ace_interact_menu_fnc_createAction;
