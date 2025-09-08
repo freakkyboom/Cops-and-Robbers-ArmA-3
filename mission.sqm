@@ -8,7 +8,7 @@ class EditorData
     toggles=1;
     class ItemIDProvider
     {
-        nextID=10;
+        nextID=3;
     };
 };
 class Mission
@@ -18,8 +18,6 @@ class Mission
         "A3_Characters_F_BLUFOR",
         "A3_Characters_F_INDEP",
         "A3_Characters_F_Common",
-        "A3_Characters_F_Civil",
-        "A3_Structures_F",
         "A3_Map_Malden"
     };
     addOnsAuto[]=
@@ -27,14 +25,12 @@ class Mission
         "A3_Characters_F_BLUFOR",
         "A3_Characters_F_INDEP",
         "A3_Characters_F_Common",
-        "A3_Characters_F_Civil",
-        "A3_Structures_F",
         "A3_Map_Malden"
     };
     randomSeed=123456;
     class Entities
     {
-        items=7;
+        items=2;
         class Item0
         {
             dataType="Group";
@@ -80,69 +76,6 @@ class Mission
                     skill=0.6;
                 };
             };
-        };
-        class Item2
-        {
-            dataType="Object";
-            class PositionInfo
-            {
-                position[]={8575,47.6,2514};
-                angles[]={0,0,0};
-            };
-            side="CIV";
-            vehicle="C_Man_casual_4_F";
-            name="gas_station_1";
-            skill=0.6;
-        };
-        class Item3
-        {
-            dataType="Object";
-            class PositionInfo
-            {
-                position[]={8579,47.6,2514};
-                angles[]={0,0,0};
-            };
-            side="CIV";
-            vehicle="C_Man_casual_5_F";
-            name="gas_station_2";
-            skill=0.6;
-        };
-        class Item4
-        {
-            dataType="Object";
-            class PositionInfo
-            {
-                position[]={8583,47.6,2514};
-                angles[]={0,0,0};
-            };
-            side="CIV";
-            vehicle="C_Man_casual_6_F";
-            name="gas_station_3";
-            skill=0.6;
-        };
-        class Item5
-        {
-            dataType="Object";
-            class PositionInfo
-            {
-                position[]={8580,47.6,2525};
-                angles[]={0,0,0};
-            };
-            side="Empty";
-            vehicle="Land_Atm_01_F";
-            name="ATM_1";
-        };
-        class Item6
-        {
-            dataType="Object";
-            class PositionInfo
-            {
-                position[]={8588,47.6,2525};
-                angles[]={0,0,0};
-            };
-            side="Empty";
-            vehicle="Land_Safe_F";
-            name="tresor";
         };
     };
     class Intel
