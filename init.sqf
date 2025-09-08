@@ -19,6 +19,7 @@ if (isServer) then
 {
     // Serverseitige Team‑ und Fahrzeugvorbereitung
     [] call CR_fnc_setupTeams;
+    [] call CR_fnc_initRobberyTargets;
 };
 
 // Aufgaben für Spieler auf ihren Clients erstellen

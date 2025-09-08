@@ -14,8 +14,8 @@
 
 params ["_target", "_caller", "_actionId", "_arguments"];
 
-// Nur Räuber (INDEPENDENT) dürfen starten
-if (side _caller != resistance) exitWith
+// Nur Räuber (CIVILIAN) dürfen starten
+if (side _caller != civilian) exitWith
 {
     hint "Nur Räuber können den Tresor knacken!";
 };
@@ -32,7 +32,7 @@ _duration = 60;
     // Beute erzeugen
     private _moneyBag = "Land_Money_F" createVehicle (getMarkerPos "bank_marker" vectorAdd [0,0,0]);
     _moneyBag setVariable ["CR_loot", true, true];
-    ["Der Tresor ist offen! Schnapp dir die Beute!", "PLAIN", 3] remoteExec ["BIS_fnc_showNotification", [resistance, west]];
+    ["Der Tresor ist offen! Schnapp dir die Beute!", "PLAIN", 3] remoteExec ["BIS_fnc_showNotification", [civilian, west]];
 };
 
 // Task‑Status aktualisieren: RobberTask1 auf „Succeeded“ setzen und RobberTask2 zuweisen

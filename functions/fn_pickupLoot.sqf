@@ -15,8 +15,8 @@
 
 params ["_target", "_caller", "_actionId", "_arguments"];
 
-// Nur Räuber (INDEPENDENT) dürfen die Beute aufnehmen
-if (side _caller != resistance) exitWith
+// Nur Räuber (civilian) dürfen die Beute aufnehmen
+if (side _caller != civilian) exitWith
 {
     hint "Nur Räuber können die Beute aufnehmen!";
 };

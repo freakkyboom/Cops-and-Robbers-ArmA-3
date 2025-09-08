@@ -22,6 +22,12 @@ class CfgFunctions
             class arrestPlayer    {};
             class endMission      {};
             class addRPInteractions {};
+
+            class initRobberyTargets {};
+            class addRobberyActions {};
+            class triggerAlarm   {};
+            class notifyCops     {};
+            class spawnVehicle   {};
             class showID         {};
         };
     };
