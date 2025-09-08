@@ -21,6 +21,10 @@ private _vars = allVariables missionNamespace;
         _obj setVariable ["CR_target", "gas", true];
         [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
     };
+
+} forEach _allObjects;
+
+
 } forEach (_vars select { _x find "gas_station_" == 0 });
 
 // Geldautomaten (platzierte Objekte)
