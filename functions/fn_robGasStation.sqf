@@ -17,21 +17,24 @@ if (!hasInterface) exitWith {};
 
 [
     150,
-    _target,
+    [_target, _caller],
     {
-        // fertig
-        params ["_target", "_caller"];
+        params ["_args"];
+        _args params ["_target", "_caller"];
         [_target] remoteExec ["CR_fnc_spawnGasLoot", 2];
         [getPos _target] remoteExec ["CR_fnc_postGasRobbery", 2];
     },
     {
-        // abgebrochen
-        params ["_target", "_caller"];
+        params ["_args"];
+        _args params ["_target", "_caller"];
         _target setVariable ["robbed", false, true];
         [] remoteExec ["CR_fnc_robberyPreventedCops", west];
     },
     "Tankstelle wird ausgeraubt...",
-    _target,
-    _caller
+    {
+        params ["_args"];
+        _args params ["_target", "_caller"];
+        alive _caller && _caller distance _target < 5 && !(_caller getVariable ["CR_arrested", false])
+    }
 ] call ace_common_fnc_progressBar;
 

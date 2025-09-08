@@ -26,6 +26,7 @@ class CfgFunctions
             class initRobberyTargets {};
             class addRobberyActions {};
             class robGasStation   {};
+            class robATM         {};
             class spawnGasLoot    {};
             class triggerAlarm   {};
             class notifyCops     {};

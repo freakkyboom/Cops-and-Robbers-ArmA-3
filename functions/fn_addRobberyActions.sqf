@@ -42,10 +42,7 @@ switch (_type) do
             "",
             {
                 params ["_target", "_player", "_args"];
-                if (side _player != civilian) exitWith {};
-                if (_target getVariable ["robbed", false]) exitWith { hint "Bereits geknackt"; };
-                _target setVariable ["robbed", true, true];
-                [getPos _target, "Ein ATM wird geknackt!"] remoteExec ["CR_fnc_triggerAlarm", 2];
+                [_target, _player] call CR_fnc_robATM;
             },
             { true }
         ] call ace_interact_menu_fnc_createAction;

@@ -10,12 +10,28 @@
 
 if (!isServer) exitWith {};
 
-params ["_class", "_pos", ["_dir", 0], ["_texture", ""]];
+params ["_class", "_spawnPos", ["_dir", 0], ["_texture", ""]];
 
-private _veh = createVehicle [_class, _pos, [], 0, "NONE"];
-_veh setDir _dir;
-if (_texture != "") then
+// Sicheren Spawnplatz finden
+private _safePos = [_spawnPos, 3, 10, 3, 0, 0.3, 0] call BIS_fnc_findSafePos;
+if (_safePos isEqualTo []) then { _safePos = _spawnPos; };
+
+// Fahrzeuge in der Nähe aufräumen
 {
+    if (_x distance _safePos < 15 && !isPlayer _x) then {
+        deleteVehicle _x;
+    };
+} forEach vehicles;
+
+private _veh = createVehicle [_class, _safePos, [], 0, "NONE"];
+_veh setDir _dir;
+_veh setPosATL [_safePos select 0, _safePos select 1, 0];
+
+if (_texture != "") then {
     _veh setObjectTextureGlobal [0, _texture];
 };
+
+_veh addEventHandler ["HandleDamage", { false }];
+_veh setVariable ["CR_spawnedVehicle", true, true];
+
 _veh
