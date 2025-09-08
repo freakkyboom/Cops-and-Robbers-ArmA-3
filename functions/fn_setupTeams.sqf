@@ -44,22 +44,14 @@ private _robberSpawn = getMarkerPos "robber_spawn";
 
 // Arsenal-Kisten
 private _copArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "cop_arsenal");
-[_copArsenal] call BIS_fnc_addVirtualArsenalCargo;
+[_copArsenal, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
 
 private _robberArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "robber_arsenal");
-[_robberArsenal] call BIS_fnc_addVirtualArsenalCargo;
+[_robberArsenal, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
 
 // Fahrzeug-Spawner
 private _copPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "cop_vehicle_spawn");
-[_copPad, ["Fahrzeug spawnen", {
-    params ["_target", "_caller"];
-    if (side _caller != west) exitWith {};
-    ["C_Offroad_01_F", getPos _target, direction _target] remoteExec ["CR_fnc_spawnVehicle", 2];
-}]] remoteExec ["addAction", 0, _copPad];
+[_copPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
 
 private _robberPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "robber_vehicle_spawn");
-[_robberPad, ["Fahrzeug spawnen", {
-    params ["_target", "_caller"];
-    if (side _caller != civilian) exitWith {};
-    ["C_SUV_01_F", getPos _target, direction _target] remoteExec ["CR_fnc_spawnVehicle", 2];
-}]] remoteExec ["addAction", 0, _robberPad];
+[_robberPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];

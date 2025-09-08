@@ -31,6 +31,9 @@ class CfgFunctions
             class notifyCops     {};
             class spawnVehicle   {};
             class showID         {};
-        };
-    };
-};
+            class addArsenalAction {};
+            class openArsenal   {};
+            class addGarageActions {};
+          };
+      };
+  };
