@@ -48,5 +48,22 @@ switch (_type) do
         ] call ace_interact_menu_fnc_createAction;
         [_obj, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
     };
+    case "vault":
+    {
+        private _action = [
+            "robVault",
+            "Tresor knacken",
+            "",
+            {
+                params ["_target", "_player", "_args"];
+                if (side _player != civilian) exitWith {};
+                if (_target getVariable ["robbed", false]) exitWith { hint "Bereits geknackt"; };
+                _target setVariable ["robbed", true, true];
+                [getPos _target, "Ein Tresor wird geknackt!"] remoteExec ["CR_fnc_triggerAlarm", 2];
+            },
+            { true }
+        ] call ace_interact_menu_fnc_createAction;
+        [_obj, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
+    };
     default {}; // für unbekannte Typen keine Aktion
 };
