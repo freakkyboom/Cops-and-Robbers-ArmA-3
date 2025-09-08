@@ -48,6 +48,15 @@ class CfgRemoteExec
         class BIS_fnc_endMission { allowedTargets = 0; };
         class BIS_fnc_showNotification { allowedTargets = 0; };
 
+
+        class CR_fnc_addRobberyActions      { allowedTargets = 1; jip = 1; };
+        class CR_fnc_addArsenalAction       { allowedTargets = 1; jip = 1; };
+        class CR_fnc_addGarageActions       { allowedTargets = 1; jip = 1; };
+        class CR_fnc_addLaptopAction       { allowedTargets = 1; jip = 1; };
+        class CR_fnc_assignSafehouseTask   { allowedTargets = 1; jip = 1; };
+        class CR_fnc_assignInterceptTask   { allowedTargets = 1; jip = 1; };
+        class CR_fnc_notifyCops            { allowedTargets = 1; jip = 1; };
+
         class CR_fnc_addRobberyActions      { allowedTargets = 0; jip = 1; };
         class CR_fnc_addArsenalAction       { allowedTargets = 0; };
         class CR_fnc_addGarageActions       { allowedTargets = 0; };
@@ -55,16 +64,23 @@ class CfgRemoteExec
         class CR_fnc_assignSafehouseTask   { allowedTargets = 1; };
         class CR_fnc_assignInterceptTask   { allowedTargets = 1; };
         class CR_fnc_notifyCops            { allowedTargets = 1; };
+
         class CR_fnc_triggerAlarm          { allowedTargets = 2; };
-        class CR_fnc_showID                { allowedTargets = 0; };
+        class CR_fnc_showID                { allowedTargets = 1; jip = 1; };
         class CR_fnc_spawnVehicle          { allowedTargets = 2; };
         class CR_fnc_spawnGasLoot          { allowedTargets = 2; };
         class CR_fnc_postGasRobbery        { allowedTargets = 2; };
-        class CR_fnc_robberyPreventedCops  { allowedTargets = 1; };
+        class CR_fnc_robberyPreventedCops  { allowedTargets = 1; jip = 1; };
         class CR_fnc_safehouseSuccess      { allowedTargets = 2; };
+
+        class CR_fnc_finishSafehouseRobber { allowedTargets = 1; jip = 1; };
+        class CR_fnc_finishSafehouseCops   { allowedTargets = 1; jip = 1; };
+        class CR_fnc_openArsenal           { allowedTargets = 1; jip = 1; };
+
         class CR_fnc_finishSafehouseRobber { allowedTargets = 1; };
         class CR_fnc_finishSafehouseCops   { allowedTargets = 1; };
         class CR_fnc_openArsenal          { allowedTargets = 0; };
+
     };
 
     class Commands
