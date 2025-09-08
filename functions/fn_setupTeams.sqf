@@ -42,16 +42,24 @@ private _robberSpawn = getMarkerPos "robber_spawn";
     };
 } forEach allUnits;
 
-// Arsenal-Kisten
-private _copArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "cop_arsenal");
-[_copArsenal, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+// Arsenal-Kisten (bereits platzierte Objekte)
+private _copArsenal = missionNamespace getVariable ["cop_arsenal", objNull];
+if (!isNull _copArsenal) then {
+    [_copArsenal, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+};
 
-private _robberArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "robber_arsenal");
-[_robberArsenal, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+private _robberArsenal = missionNamespace getVariable ["robber_arsenal", objNull];
+if (!isNull _robberArsenal) then {
+    [_robberArsenal, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+};
 
-// Fahrzeug-Spawner
-private _copPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "cop_vehicle_spawn");
-[_copPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
+// Fahrzeug-Spawner (Cargo-Netze)
+private _copPad = missionNamespace getVariable ["cop_vehicle_spawn", objNull];
+if (!isNull _copPad) then {
+    [_copPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
+};
 
-private _robberPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "robber_vehicle_spawn");
-[_robberPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];
+private _robberPad = missionNamespace getVariable ["robber_vehicle_spawn", objNull];
+if (!isNull _robberPad) then {
+    [_robberPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];
+};
