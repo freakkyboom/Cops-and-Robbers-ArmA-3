@@ -21,7 +21,7 @@ switch (_type) do
             if (side _caller != civilian) exitWith {};
             if (_target getVariable ["robbed", false]) exitWith { hint "Bereits ausgeraubt"; };
             _target setVariable ["robbed", true, true];
-            [getPos _target, "Überfall auf eine Tankstelle!"] remoteExec ["CR_fnc_triggerAlarm", 2];
+            [_target, _caller] call CR_fnc_robGasStation;
         }];
     };
     case "atm":
