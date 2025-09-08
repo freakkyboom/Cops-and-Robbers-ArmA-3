@@ -17,9 +17,6 @@ Cops-and-Robbers ist ein kooperatives Szenario für Arma 3, in dem zwei Teams ge
 - **Räuber** planen Überfälle auf z. B. Tankstellen und müssen mit der Beute zum Safehouse gelangen.
 - Nach einem erfolgreichen Überfall folgt eine Safehouse-Phase, in der die Räuber sich verstecken und die Polizei nach ihnen fahndet.
 
-Die Mission bringt bereits drei benannte Tankstellen-NPCs (`gas_station_1` bis `gas_station_3`),
-fünf Geldautomaten (`atm_1` bis `atm_5`) und einen Tresor (`tresor`) mit. Diese Objekte werden zur
-Laufzeit über `CR_fnc_initRobberyTargets` mit ACE-Interaktionen für Überfälle versehen.
 
 ## Funktionsreferenz
 | Funktion | Beschreibung |
