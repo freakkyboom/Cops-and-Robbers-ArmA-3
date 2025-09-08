@@ -1,28 +1,30 @@
 /*
     Funktion: CR_fnc_initRobberyTargets
     Zweck: Initialisiert Tankstellen, Geldautomaten und einen zufälligen Tresor.
-    Bei Interaktion oder Näherung wird ein Alarm ausgelöst.
+    Bei Interaktion wird ein Alarm ausgelöst.
 */
 
 if (!isServer) exitWith {};
 
-// Tankstellen
-private _gasMarkers = ["gas_station_1", "gas_station_2", "gas_station_3"];
+// Tankstellen (NPCs)
+private _gasTargets = ["gas_station_1", "gas_station_2", "gas_station_3"];
 {
-    private _pos = getMarkerPos _x;
-    private _obj = "Land_FuelStation_Feed_F" createVehicle _pos;
-    _obj setVariable ["CR_target", "gas", true];
-    [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
-} forEach _gasMarkers;
+    private _obj = missionNamespace getVariable [_x, objNull];
+    if (!isNull _obj) then {
+        _obj setVariable ["CR_target", "gas", true];
+        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    };
+} forEach _gasTargets;
 
-// Geldautomaten
-private _atmMarkers = ["atm_1", "atm_2", "atm_3", "atm_4", "atm_5"];
+// Geldautomaten (platzierte Objekte)
+private _atmTargets = ["ATM_1", "ATM_2", "ATM_3", "ATM_4", "ATM_5"];
 {
-    private _pos = getMarkerPos _x;
-    private _obj = "Land_ATM_01_F" createVehicle _pos;
-    _obj setVariable ["CR_target", "atm", true];
-    [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
-} forEach _atmMarkers;
+    private _obj = missionNamespace getVariable [_x, objNull];
+    if (!isNull _obj) then {
+        _obj setVariable ["CR_target", "atm", true];
+        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    };
+} forEach _atmTargets;
 
 // Tresor zufällig platzieren
 private _areaCenter = getMarkerPos "vault_area";
@@ -34,20 +36,5 @@ private _vaultPos = [
 ];
 private _vault = "Land_Safe_F" createVehicle _vaultPos;
 _vault setVariable ["CR_target", "vault", true];
+[_vault] remoteExec ["CR_fnc_addRobberyActions", 0, _vault];
 
-// Tresor näherungsüberwachung
-[_vault] spawn
-{
-    params ["_safe"];
-    while {alive _safe} do
-    {
-        {
-            if (side _x == civilian && {_x distance _safe < 2} && !(_safe getVariable ["alarm", false])) then
-            {
-                _safe setVariable ["alarm", true, true];
-                [getPos _safe, "Ein Tresor wird geknackt!"] call CR_fnc_triggerAlarm;
-            };
-        } forEach allPlayers;
-        sleep 1;
-    };
-};
