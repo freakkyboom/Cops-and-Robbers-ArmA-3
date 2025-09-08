@@ -44,19 +44,14 @@ private _robberSpawn = getMarkerPos "robber_spawn";
 
 // Arsenal-Kisten
 private _copArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "cop_arsenal");
-// Warten, bis das Objekt im Netzwerk bekannt ist, bevor die Aktion verteilt wird
-sleep 1;
-[_copArsenal, west] remoteExec ["CR_fnc_addArsenalAction", -2, true];
+[_copArsenal, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
 
 private _robberArsenal = "B_supplyCrate_F" createVehicle (getMarkerPos "robber_arsenal");
-sleep 1;
-[_robberArsenal, civilian] remoteExec ["CR_fnc_addArsenalAction", -2, true];
+[_robberArsenal, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
 
 // Fahrzeug-Spawner
 private _copPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "cop_vehicle_spawn");
-sleep 1;
-[_copPad, west] remoteExec ["CR_fnc_addGarageActions", -2, true];
+[_copPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
 
 private _robberPad = "Land_HelipadEmpty_F" createVehicle (getMarkerPos "robber_vehicle_spawn");
-sleep 1;
-[_robberPad, civilian] remoteExec ["CR_fnc_addGarageActions", -2, true];
+[_robberPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];
