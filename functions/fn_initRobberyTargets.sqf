@@ -24,7 +24,7 @@ if (!isServer) exitWith {};
         [_x] remoteExec ["CR_fnc_addRobberyActions", 0, true];
     };
 } forEach _allObjects;
-=======
+
 } forEach (_vars select { _x find "gas_station_" == 0 });
 
 // Geldautomaten (platzierte Objekte)
