@@ -7,6 +7,7 @@
 */
 
 if (!hasInterface) exitWith {};
+waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
 params ["_pad", "_side"];
 if (side player != _side) exitWith {};
 
