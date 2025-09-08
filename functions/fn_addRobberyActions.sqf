@@ -11,6 +11,7 @@
 params ["_obj"];
 
 if (!hasInterface) exitWith {};
+waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
 
 private _type = _obj getVariable ["CR_target", ""];
 
