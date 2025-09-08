@@ -6,23 +6,25 @@
 
 if (!isServer) exitWith {};
 
-// Tankstellen
-private _gasMarkers = ["gas_station_1", "gas_station_2", "gas_station_3"];
+// Tankstellen (NPCs)
+private _gasTargets = ["gas_station_1", "gas_station_2", "gas_station_3"];
 {
-    private _pos = getMarkerPos _x;
-    private _obj = "Land_FuelStation_Feed_F" createVehicle _pos;
-    _obj setVariable ["CR_target", "gas", true];
-    [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
-} forEach _gasMarkers;
+    private _obj = missionNamespace getVariable [_x, objNull];
+    if (!isNull _obj) then {
+        _obj setVariable ["CR_target", "gas", true];
+        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    };
+} forEach _gasTargets;
 
-// Geldautomaten
-private _atmMarkers = ["atm_1", "atm_2", "atm_3", "atm_4", "atm_5"];
+// Geldautomaten (platzierte Objekte)
+private _atmTargets = ["ATM_1", "ATM_2", "ATM_3", "ATM_4", "ATM_5"];
 {
-    private _pos = getMarkerPos _x;
-    private _obj = "Land_ATM_01_F" createVehicle _pos;
-    _obj setVariable ["CR_target", "atm", true];
-    [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
-} forEach _atmMarkers;
+    private _obj = missionNamespace getVariable [_x, objNull];
+    if (!isNull _obj) then {
+        _obj setVariable ["CR_target", "atm", true];
+        [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, _obj];
+    };
+} forEach _atmTargets;
 
 // Tresor zufällig platzieren
 private _areaCenter = getMarkerPos "vault_area";
