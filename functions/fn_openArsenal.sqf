@@ -34,6 +34,6 @@ private _items = switch (side _caller) do
     };
 };
 
-[_box, _items] call ace_arsenal_fnc_clearBox;
+[_box] call ace_arsenal_fnc_clearBox;
 [_box, _items] call ace_arsenal_fnc_addVirtualItems;
 [_box, _caller, true] call ace_arsenal_fnc_openBox;
