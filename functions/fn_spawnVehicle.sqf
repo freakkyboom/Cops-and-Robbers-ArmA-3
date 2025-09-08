@@ -10,8 +10,12 @@
 
 if (!isServer) exitWith {};
 
-params ["_class", "_pos", ["_dir", 0]];
+params ["_class", "_pos", ["_dir", 0], ["_texture", ""]];
 
 private _veh = createVehicle [_class, _pos, [], 0, "NONE"];
 _veh setDir _dir;
+if (_texture != "") then
+{
+    _veh setObjectTextureGlobal [0, _texture];
+};
 _veh

@@ -25,10 +25,15 @@ class CfgFunctions
 
             class initRobberyTargets {};
             class addRobberyActions {};
+            class robGasStation   {};
+            class spawnGasLoot    {};
             class triggerAlarm   {};
             class notifyCops     {};
             class spawnVehicle   {};
             class showID         {};
-        };
-    };
-};
+            class addArsenalAction {};
+            class openArsenal   {};
+            class addGarageActions {};
+          };
+      };
+  };
