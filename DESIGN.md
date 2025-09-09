@@ -126,7 +126,11 @@ class CfgRemoteExec {
 [] call CR_fnc_setupTeams;
 [] call CR_fnc_initRobberyTargets;
 publicVariable "CR_RobberySites"; // [{obj, type, name, cooldown}, ...]
+
 CR_Economy = call compile preprocessFileLineNumbers "config/economy.sqf"; // optional - consider using CBA settings or a .hpp include instead
+=======
+CR_Economy = call compile preprocessFileLineNumbers "config\economy.sqf"; // optional
+
 ```
 
 **initPlayerLocal.sqf (Ausschnitt)**
@@ -375,10 +379,16 @@ _unit addItemToUniform "ACE_moneyroll"; // Platzhalter
 
 ```sqf
 // utility: CR_fnc_onCooldown
+
 CR_fnc_onCooldown = {
     params ["_obj"];
     serverTime < (_obj getVariable ["CR_cdUntil", 0]);
 };
+=======
+params ["_obj"];
+serverTime < (_obj getVariable ["CR_cdUntil", 0]);
+```
+
 
 **Fence Sell (Server)**
 
