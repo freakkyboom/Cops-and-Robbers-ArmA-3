@@ -24,7 +24,7 @@ loadScreen  = "\A3\ui_f\data\map_backgrounds\background_terrain_ca.paa";
 
 // Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten (siehe editor‑Marker)
 respawn            = 3;        // 3 = BASE: Respawn an Marker mit dem Namen "respawn_west" usw.
-respawnDelay       = 10;
+respawnDelay       = 3;
 respawnTemplates[] = {"MenuPosition"};
 
 // Grundlegende Missionsparameter
