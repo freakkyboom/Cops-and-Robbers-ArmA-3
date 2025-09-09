@@ -14,23 +14,14 @@
         Fallbacks: respawn_west, cop_spawn
       - Robbers (CIV/civilian): robber_spawn_1, robber_spawn_2, robber_spawn_3, ...
         Fallbacks: respawn_civilian, robber_spawn
-
-    Erforderliche RemoteExec-Whitelist (in description.ext -> CfgRemoteExec):
-      - CR_fnc_setupTeams (ANYONE / jip=1)
-      - CR_fnc_addArsenalAction (CLIENT)
-      - CR_fnc_addGarageActions (CLIENT)
 */
 params [
-    // _mode: "serverInit" (intern), "clientInit" (intern) oder "" (Default -> orchestriert beides)
     ["_mode", ""],
-    // optionale, vom Server übergebene Spawn-Arrays (JIP-sicher via remoteExec mit JIP-Flag)
     ["_westSpawns", [], [[]]],
     ["_civSpawns",  [], [[]]]
 ];
 
-    // ----------------------------
     // Hilfsfunktionen (lokal)
-    // ----------------------------
     private _collectMarkers = {
         params ["_prefixes", "_fallbacks"];
         private _out = [];
@@ -61,7 +52,7 @@ params [
             };
         } forEach _fallbacks;
 
-        // Duplikate anhand des Markernamens entfernen (sicherheits-halber)
+        // Duplikate anhand des Markernamens entfernen
         private _unique = [];
         private _seen = [];
         {
@@ -76,23 +67,42 @@ params [
     };
 
     private _bindInteractionsServer = {
-        // Arsenal-/Garage-Objekte anhand globaler Variablen binden (falls im Editor als VarName gesetzt)
-        private _copArsenalObj = missionNamespace getVariable ["cop_arsenal", objNull];
+        // Arsenal-/Garage-Objekte anhand globaler Variablen binden
+        // KORREKTUR: mission.sqm zeigt "cop_arsenal" und "robber_arsenal" als Objektnamen
+        private _allObjects = allMissionObjects "All";
+        
+        // Finde Arsenal-Objekte
+        private _copArsenalObj = objNull;
+        private _robArsenalObj = objNull;
+        
+        {
+            private _varName = vehicleVarName _x;
+            if (_varName == "cop_arsenal") then { _copArsenalObj = _x; };
+            if (_varName == "robber_arsenal") then { _robArsenalObj = _x; };
+        } forEach _allObjects;
+
         if (!isNull _copArsenalObj) then {
             [_copArsenalObj, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
         };
 
-        private _robArsenalObj = missionNamespace getVariable ["robber_arsenal", objNull];
         if (!isNull _robArsenalObj) then {
             [_robArsenalObj, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
         };
 
-        private _copVehPad = missionNamespace getVariable ["cop_vehicle_spawn", objNull];
+        // Finde Vehicle-Spawn-Pads
+        private _copVehPad = objNull;
+        private _robVehPad = objNull;
+        
+        {
+            private _varName = vehicleVarName _x;
+            if (_varName == "cop_vehicle_spawn") then { _copVehPad = _x; };
+            if (_varName == "robber_vehicle_spawn") then { _robVehPad = _x; };
+        } forEach _allObjects;
+
         if (!isNull _copVehPad) then {
             [_copVehPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
         };
 
-        private _robVehPad = missionNamespace getVariable ["robber_vehicle_spawn", objNull];
         if (!isNull _robVehPad) then {
             [_robVehPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];
         };
@@ -106,7 +116,6 @@ params [
         // Entferne ggf. alte CR-Respawns dieses Clients
         private _old = player getVariable ["CR_respawnIDs", []];
         {
-            // BIS_fnc_removeRespawnPosition erwartet [side, id]
             [side player, _x] call BIS_fnc_removeRespawnPosition;
         } forEach _old;
         player setVariable ["CR_respawnIDs", []];
@@ -118,10 +127,9 @@ params [
             default { [] };
         };
 
-        // Falls nichts gefunden, nicht fehlschlagen – Menü funktioniert mit Standard-Respawnmarkern weiter
         if (_spawns isEqualTo []) exitWith {};
 
-        // Registriere Respawn-Positionen (clientseitig)
+        // Registriere Respawn-Positionen
         private _ids = [];
         private _idx = 0;
         {
@@ -134,7 +142,6 @@ params [
                 default { _name };
             };
 
-            // Rückgabe: Respawn-ID (numeric)
             private _id = [side player, _pos, _label] call BIS_fnc_addRespawnPosition;
             if (!isNil "_id") then { _ids pushBack _id; };
         } forEach _spawns;
@@ -142,17 +149,13 @@ params [
         player setVariable ["CR_respawnIDs", _ids];
     };
 
-    // --------------------------------
     // Orchestrierung
-    // --------------------------------
     if (_mode isEqualTo "") exitWith {
-        // Server orchestriert beides und macht JIP-sichere RemoteExecs
         if (isServer) then {
             // 1) Serverseitig sammeln
-            private _west = [_collectMarkers, [["cop_spawn"], ["respawn_west","cop_spawn"]]] call BIS_fnc_call;   // Prefixes, Fallbacks
-            private _civ  = [_collectMarkers, [["robber_spawn"], ["respawn_civilian","robber_spawn"]]] call BIS_fnc_call;
+            private _west = [["cop_spawn"], ["respawn_west","cop_spawn"]] call _collectMarkers;
+            private _civ  = [["robber_spawn"], ["respawn_civilian","robber_spawn"]] call _collectMarkers;
 
-            // Falls gar nichts gefunden: bewusst NICHT abbrechen -> Standard-Respawnmarker greifen
             missionNamespace setVariable ["CR_SpawnMarkersWest", _west];
             missionNamespace setVariable ["CR_SpawnMarkersCiv",  _civ];
             publicVariable "CR_SpawnMarkersWest";
@@ -164,31 +167,22 @@ params [
             // 3) Clients initialisieren (JIP-sicher)
             ["clientInit", _west, _civ] remoteExec ["CR_fnc_setupTeams", 0, true];
         } else {
-            // Falls ein Client dies direkt aufruft (z. B. Test), nur lokale Respawns anwenden, sofern Daten vorhanden
             private _west = missionNamespace getVariable ["CR_SpawnMarkersWest", []];
             private _civ  = missionNamespace getVariable ["CR_SpawnMarkersCiv",  []];
             [_west, _civ] call _applyRespawnsClient;
         };
     };
 
-    // --------------------------------
     // Server-spezifisch
-    // --------------------------------
     if (_mode isEqualTo "serverInit") exitWith {
         if (!isServer) exitWith {};
-        // (Wird aktuell nicht separat genutzt – Orchestrierung oben.)
         true
     };
 
-    // --------------------------------
     // Client-spezifisch
-    // --------------------------------
     if (_mode isEqualTo "clientInit") exitWith {
-        // _westSpawns/_civSpawns kommen als Parameter vom Server (JIP-sicher via remoteExec mit JIP-Flag)
         [_westSpawns, _civSpawns] call _applyRespawnsClient;
 
-        // Zusätzlich: Falls später vom Server neue Marker publiziert werden, registriere dich auf Änderungen.
-        // (Leichtgewichtig, stört nicht falls nie geändert wird.)
         if (isNil {missionNamespace getVariable "CR_RespawnPVEH_Registered"}) then {
             missionNamespace setVariable ["CR_RespawnPVEH_Registered", true];
             "CR_SpawnMarkersWest" addPublicVariableEventHandler {
@@ -202,7 +196,7 @@ params [
                 [_west, _val] call _applyRespawnsClient;
             };
         };
-      true
-  };
+        true
+    };
 
-      true
+    true
