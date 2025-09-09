@@ -1,15 +1,8 @@
-/*
-    Funktion: CR_fnc_spawnGasLoot
-    Zweck: Spawnt eine Kiste mit einer Übungsmine an der Tankstelle
-    nach erfolgreichem Raub.
-    Parameter:
-        0: OBJECT - Tankstellenobjekt
-*/
-
-if (!isServer) exitWith {};
-
-params ["_target"];
-
-private _crate = "Box_NATO_Ammo_F" createVehicle (getPos _target);
-_crate addItemCargoGlobal ["TrainingMine_Mag", 1];
-
+CR_fnc_spawnGasLoot = {
+  if (!isServer) exitWith {};
+  params ["_anchor"];
+  private _pos = getPosATL _anchor vectorAdd [0,0.8,0];
+  private _crate = createVehicle ["Box_NATO_Ammo_F", _pos, [], 0, "NONE"];
+  clearBackpackCargoGlobal _crate; clearItemCargoGlobal _crate; clearWeaponCargoGlobal _crate; clearMagazineCargoGlobal _crate;
+  _crate addMagazineCargoGlobal ["TrainingMine_Mag", 10];
+};

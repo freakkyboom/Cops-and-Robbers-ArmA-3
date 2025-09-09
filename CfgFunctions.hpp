@@ -28,9 +28,13 @@ class CfgFunctions
             class robGasStation   {};
             class robATM         {};
             class spawnGasLoot    {};
-            class triggerAlarm   {};
-            class notifyCops     {};
-            class spawnVehicle   {};
+            class startSiren      {};
+            class stopSiren       {};
+            class saySirenLocal   {};
+            class explodeUnit     {};
+            class spawnVehicle    {};
+            class triggerAlarm    {};
+            class notifyCops      {};
             class showID         {};
             class addArsenalAction {};
             class openArsenal   {};

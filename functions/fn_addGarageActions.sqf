@@ -6,8 +6,8 @@
         1: SIDE   - Fraktion, die Zugriff hat
 */
 
-if (!hasInterface) exitWith {};
 waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
+if (!hasInterface) exitWith {};
 params ["_pad", "_side"];
 if (side player != _side) exitWith {};
 
@@ -46,6 +46,8 @@ private _root = ["garageRoot", "Fahrzeuge", "", {}, {true}] call ace_interact_me
         private _texAction = [format ["tex_%1_%2", _class, _forEachIndex], _name, "", {
             params ["_target", "_player", "_args"];
             _args params ["_class", "_tex"];
+            private _occupied = (nearestObjects [getPosATL _target, ["Car","Tank","Air","Ship","StaticWeapon"], 7]) isNotEqualTo [];
+            if (_occupied) exitWith { ["Spawnfläche blockiert!",2] call ace_common_fnc_displayTextStructured; };
             [ _class, getPos _target, direction _target, _tex ] remoteExec ["CR_fnc_spawnVehicle", 2];
         }, {true}, [_class, _tex]] call ace_interact_menu_fnc_createAction;
         [_pad, 0, ["ACE_MainActions", "garageRoot", format ["veh_%1", _class]], _texAction] call ace_interact_menu_fnc_addActionToObject;
