@@ -15,7 +15,7 @@ CR_fnc_explodeUnit = {
     private _pos = getPosATL _unit;
     
     // Hauptexplosion
-    private _explosion = "Bo_Grenade" createVehicle _pos;
+    private _explosion = "Sh_82mm_AMOS" createVehicle _pos;
     
     // Zusätzliche Effekte
     "HelicopterExploSmall" createVehicle _pos;
