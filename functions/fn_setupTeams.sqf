@@ -19,11 +19,11 @@ params [
         {
             private _prefix = _x;
             for "_i" from 1 to 99 do {
-                private _name = format ["%1_%2", _prefix, _i];
+                private _name = _prefix + "_" + str _i;
                 if (markerExists _name) then {
                     private _pos = getMarkerPos _name;
                     if (!(_pos isEqualTo [0,0,0])) then {
-                        private _label = format ["%1 #%2", _prefix, _i];
+                        private _label = _prefix + " #" + str _i;
                         _out pushBack [_name, _pos, _label];
                     };
                 };

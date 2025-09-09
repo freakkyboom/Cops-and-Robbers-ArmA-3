@@ -12,7 +12,6 @@ diag_log format ["[CR] addArsenalAction called: box=%1, side=%2, playerSide=%3",
 if (isNil "ace_interact_menu_fnc_createAction") then {
     diag_log "[CR][ERROR] ACE interact menu not available!";
     exitWith {};
-	;
 };
 
 if (!hasInterface) then {
