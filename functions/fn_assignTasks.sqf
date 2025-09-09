@@ -10,11 +10,15 @@ if (!hasInterface) exitWith {};
 
     // ----- Hilfsfunktionen
     private _markerPos = {
-        params ["_candidates"];                     // ["cop_spawn","respawn_west"]
+        params ["_candidates"]; // ["cop_spawn","respawn_west"]
         private _pos = [0,0,0];
+
         {
-            if (markerExists _x) exitWith { _pos = getMarkerPos _x; };
+            if (markerExists _x) exitWith {
+                _pos = getMarkerPos _x;
+            };
         } forEach _candidates;
+
         _pos
     };
 

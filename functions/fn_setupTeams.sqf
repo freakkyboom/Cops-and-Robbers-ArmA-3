@@ -43,7 +43,8 @@ params [
                 if (markerExists _name) then {
                     private _pos = getMarkerPos _name;
                     if (!(_pos isEqualTo [0,0,0])) then {
-                        _out pushBack [_name, _pos, format ["%1 #%2", _prefix, _i]];
+                        private _label = format ["%1 #%2", _prefix, _i];
+                        _out pushBack [_name, _pos, _label];
                     };
                 };
             };
