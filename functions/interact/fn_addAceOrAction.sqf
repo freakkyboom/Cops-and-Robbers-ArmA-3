@@ -9,25 +9,19 @@
       1: Titel (_title)
       2: Code (Script handle to execute on use)
       3: Show condition (code returning boolean, optional)
-      4: Enable condition (code returning boolean, optional)
-      5: onProgress (unused here)
-      6: arguments array passed to code
+      4: Arguments array passed to code (optional)
 */
 // Parameters for addAceOrAction:
 // 0: object to attach the action to
 // 1: title (string)
 // 2: code to execute when the action is used
 // 3: show condition (optional, defaults to {true})
-// 4: enable condition (optional, defaults to {true})
-// 5: onProgress (unused, optional)
-// 6: arguments array passed to the code (optional)
+// 4: arguments array passed to the code (optional)
 params [
     "_obj",
     "_title",
     "_code",
     ["_cond_show", {true}],
-    ["_cond_enable", {true}],
-    ["_onProgress", {}],
     ["_args", []]
 ];
 
@@ -40,7 +34,6 @@ if (!isNull _obj) then {
             "",
             _code,
             _cond_show,
-            _cond_enable,
             {},
             _args
         ] call ace_interact_menu_fnc_createAction;
