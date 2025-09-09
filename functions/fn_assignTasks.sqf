@@ -11,15 +11,9 @@ if (!hasInterface) exitWith {};
     // ----- Hilfsfunktionen
     private _markerPos = {
         params ["_candidates"]; // ["cop_spawn","respawn_west"]
-        private _pos = [0,0,0];
-
-        {
-            if (markerExists _x) exitWith {
-                _pos = getMarkerPos _x;
-            };
-        } forEach _candidates;
-
-        _pos
+        private _idx = _candidates findIf { markerExists _x };
+        if (_idx == -1) exitWith { [0,0,0] };
+        getMarkerPos (_candidates select _idx)
     };
 
     private _createOrUpdateTask = {
