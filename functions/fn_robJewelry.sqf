@@ -5,10 +5,8 @@
         0: OBJECT - Juwelier-Objekt
         1: OBJECT - raubender Spieler
 */
-
-CR_fnc_robJewelry = {
-    params ["_target", "_player"];
-    if (!hasInterface || {_player != ACE_player}) exitWith {};
+params ["_target", "_player"];
+if (!hasInterface || {_player != ACE_player}) exitWith {};
     if (_target getVariable ["CR_robbing", false]) exitWith {
         ["Bereits im Gange",2] call ace_common_fnc_displayTextStructured;
     };
@@ -38,4 +36,3 @@ CR_fnc_robJewelry = {
         ["Überfall abgebrochen",2] call ace_common_fnc_displayTextStructured;
     };
     [_dur, [_target, _player], _onFinish, _onFail, "Juwelier wird ausgeraubt…", _cond, [], true] call ace_common_fnc_progressBar;
-};

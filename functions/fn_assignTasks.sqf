@@ -6,9 +6,7 @@
     - Vermeidet Duplikate bei erneutem Aufruf (Respawn/JIP).
     - Fällt robust auf alternative Marker zurück.
 */
-
-CR_fnc_assignTasks = {
-    if (!hasInterface) exitWith {};
+if (!hasInterface) exitWith {};
 
     // ----- Hilfsfunktionen
     private _markerPos = {
@@ -86,4 +84,3 @@ CR_fnc_assignTasks = {
             // keine Tasks
         };
     };
-};

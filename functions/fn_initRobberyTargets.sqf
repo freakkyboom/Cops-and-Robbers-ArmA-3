@@ -23,9 +23,7 @@
     Abhängigkeiten:
       - CR_fnc_addRobberyActions (fügt pro Ziel die ACE-Interaktionen hinzu)
 */
-
-CR_fnc_initRobberyTargets = {
-    if (!isServer) exitWith {};
+if (!isServer) exitWith {};
 
     // Idempotenz: alten Cache leeren, Marker-Flags zurücksetzen
     if (!isNil "CR_RobberyTargets") then {
@@ -117,4 +115,3 @@ CR_fnc_initRobberyTargets = {
 
     // Optional: Server-Log
     diag_log format ["[CR] initRobberyTargets: erkannt=%1, verteilt=%2", _recognized, count _targets];
-};
