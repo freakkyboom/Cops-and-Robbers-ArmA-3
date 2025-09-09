@@ -25,7 +25,10 @@ loadScreen  = "\A3\ui_f\data\map_backgrounds\background_terrain_ca.paa";
 // Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten (siehe editor‑Marker)
 respawn            = 3;        // 3 = BASE: Respawn an Marker mit dem Namen "respawn_west" usw.
 respawnDelay       = 3;
-respawnTemplates[] = {"MenuPosition"};
+respawnOnStart = -1;
+respawnTemplates[] = {"MenuPosition","MenuInventory"};
+disabledAI = 1;                   // Falls nur Spieler
+enableDebugConsole = 1;           // 0 auf Live-Server
 
 // Grundlegende Missionsparameter
 class Header
@@ -37,8 +40,7 @@ class Header
 
 // Verweise auf zusätzliche Konfigurationsdateien
 #include "CfgFunctions.hpp"
-disabledAI = 1;                   // Falls nur Spieler
-enableDebugConsole = 1;           // 0 auf Live-Server
+
 
 class CfgRemoteExec
 {
@@ -87,7 +89,11 @@ class CfgRemoteExec
         jip = 0;
     };
 };
-
+// Makro:
+#define F(fn,scope) class fn { allowedTargets = scope; };
+#define ANYONE 0
+#define CLIENT 1
+#define SERVER 2
 class CfgSounds {
   class CR_Siren {
     name = "CR_Siren";
