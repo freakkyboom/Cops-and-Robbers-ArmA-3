@@ -4,11 +4,9 @@
     Zweck: Fügt einem Zielobjekt (Tankstelle/ATM/Tresor/Juwelier/Lagerhalle) passende ACE-Aktionen hinzu.
     Aufruf: [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, true];  // vom Server aus
 */
-
-CR_fnc_addRobberyActions = {
-    params [["_obj", objNull, [objNull]]];
-    if (isNull _obj) exitWith {};
-    if (!hasInterface) exitWith {};
+params [["_obj", objNull, [objNull]]];
+if (isNull _obj) exitWith {};
+if (!hasInterface) exitWith {};
 
     // Warten bis ACE Interact bereit ist (mit Timeout)
     private _t0 = time;
@@ -146,4 +144,3 @@ CR_fnc_addRobberyActions = {
             _obj setVariable ["CR_actionsAdded", false]; // Freigeben, falls später Typ gesetzt wird
         };
     };
-};

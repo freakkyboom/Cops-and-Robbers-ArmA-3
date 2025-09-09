@@ -1,6 +1,5 @@
-CR_fnc_explodeUnit = {
-    if (!isServer) exitWith {};
-    params ["_unit"];
+if (!isServer) exitWith {};
+params ["_unit"];
     
     // Validierung
     if (isNull _unit || !alive _unit) exitWith {};
@@ -32,7 +31,6 @@ CR_fnc_explodeUnit = {
             _x setDamage ((damage _x) + 0.5);
         };
     } forEach (nearestObjects [_unit, ["CAManBase"], 10]);
-};
 
 /*
     VERWENDUNG in der Mission:

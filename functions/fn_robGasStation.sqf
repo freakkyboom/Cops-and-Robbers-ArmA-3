@@ -1,6 +1,5 @@
-CR_fnc_robGasStation = {
-    params ["_target","_player"];
-    if (!hasInterface || {_player != ACE_player}) exitWith {};
+params ["_target","_player"];
+if (!hasInterface || {_player != ACE_player}) exitWith {};
     private _hasPrimary  = (primaryWeapon  _player) != "";
     private _hasHandgun  = (handgunWeapon  _player) != "";
     private _hasLauncher = (secondaryWeapon _player) != "";
@@ -13,4 +12,3 @@ CR_fnc_robGasStation = {
     private _onFinish = { params ["_a"]; _a params ["_tgt","_pl"]; [_tgt] remoteExec ["CR_fnc_stopSiren", 2]; if (isServer) then {[_tgt] call CR_fnc_spawnGasLoot;} else {[_tgt] remoteExec ["CR_fnc_spawnGasLoot",2];}; [getPos _tgt,"Tankstellenüberfall im Gange!"] remoteExec ["CR_fnc_triggerAlarm",2]; _tgt setVariable ["robbed",true,true]; _tgt setVariable ["CR_robbing",false,true]; ["Überfall erfolgreich!",3] call ace_common_fnc_displayTextStructured; };
     private _onFail   = { params ["_a"]; _a params ["_tgt","_pl"]; [_tgt] remoteExec ["CR_fnc_stopSiren", 2]; _tgt setVariable ["CR_robbing",false,true]; ["Überfall abgebrochen",2] call ace_common_fnc_displayTextStructured; };
     [_dur, [_target,_player], _onFinish, _onFail, "Tankstelle wird ausgeraubt…", _cond, [], true] call ace_common_fnc_progressBar;
-};
