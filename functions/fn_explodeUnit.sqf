@@ -1,4 +1,3 @@
-CR_fnc_explodeUnit = {
     if (!isServer) exitWith {};
     params ["_unit"];
     

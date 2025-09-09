@@ -53,4 +53,3 @@ hint "Räuber wurde verhaftet!";
     {
         [] call CR_fnc_endMission;
     };
-};

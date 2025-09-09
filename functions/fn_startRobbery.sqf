@@ -39,4 +39,3 @@ _duration = 60;
 if (!isNil "CR_robTaskRob") then
 {
     CR_robTaskRob setTaskState "Succeeded";
-};

@@ -16,4 +16,3 @@ if (!isNil "CR_copTaskIntercept") then {
 // Streifenaufgabe erneut zuweisen
 if (!isNil "CR_copTaskPatrol") then {
     CR_copTaskPatrol setTaskState "Assigned";
-};

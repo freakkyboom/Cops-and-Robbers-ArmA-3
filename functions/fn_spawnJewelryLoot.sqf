@@ -1,4 +1,3 @@
-CR_fnc_spawnJewelryLoot = {
   if (!isServer) exitWith {};
   params ["_anchor"];
   private _pos = getPosATL _anchor vectorAdd [0,0.8,0];
@@ -8,4 +7,3 @@ CR_fnc_spawnJewelryLoot = {
   clearWeaponCargoGlobal _crate;
   clearMagazineCargoGlobal _crate;
   _crate addItemCargoGlobal ["ACE_moneyroll", 5];
-};

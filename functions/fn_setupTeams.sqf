@@ -21,7 +21,6 @@
       - CR_fnc_addGarageActions (CLIENT)
 */
 
-CR_fnc_setupTeams = {
     params [
         // _mode: "serverInit" (intern), "clientInit" (intern) oder "" (Default -> orchestriert beides)
         ["_mode", ""],
@@ -205,13 +204,3 @@ CR_fnc_setupTeams = {
         };
         true
     };
-
-    true
-};
-
-// Auto-Start beim Laden, falls direkt ausgeführt wird (z. B. via [] call CR_fnc_setupTeams; in init.sqf)
-if (isNil {missionNamespace getVariable "CR_SetupTeams_AutoRun"}) then {
-    missionNamespace setVariable ["CR_SetupTeams_AutoRun", true];
-    // Nur einmal orchestrieren
-    [""] call CR_fnc_setupTeams;
-};

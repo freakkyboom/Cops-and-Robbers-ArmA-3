@@ -35,4 +35,3 @@ switch (_mode) do {
             _tgt setVariable ["CR_isLocked", false, true];
         };
     };
-};

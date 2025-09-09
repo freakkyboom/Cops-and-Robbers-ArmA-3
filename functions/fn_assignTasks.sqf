@@ -7,7 +7,6 @@
     - Fällt robust auf alternative Marker zurück.
 */
 
-CR_fnc_assignTasks = {
     if (!hasInterface) exitWith {};
 
     // ----- Hilfsfunktionen
@@ -86,4 +85,3 @@ CR_fnc_assignTasks = {
             // keine Tasks
         };
     };
-};

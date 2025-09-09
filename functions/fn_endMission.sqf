@@ -31,4 +31,3 @@ if (_lootDelivered) then
 {
     // Polizisten haben gewonnen (alle Räuber verhaftet oder ausgeschaltet)
     ["CopsWin"] remoteExec ["BIS_fnc_endMission", 0];
-};

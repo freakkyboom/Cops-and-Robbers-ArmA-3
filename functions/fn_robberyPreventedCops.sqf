@@ -13,4 +13,3 @@ if (!isNil "CR_copTaskPrevent") then {
 [] call CR_fnc_clearCopMarkers;
 if (!isNil "CR_copTaskPatrol") then {
     CR_copTaskPatrol setTaskState "Assigned";
-};

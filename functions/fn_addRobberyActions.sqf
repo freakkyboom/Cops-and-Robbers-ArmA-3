@@ -5,7 +5,6 @@
     Aufruf: [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, true];  // vom Server aus
 */
 
-CR_fnc_addRobberyActions = {
     params [["_obj", objNull, [objNull]]];
     if (isNull _obj) exitWith {};
     if (!hasInterface) exitWith {};
@@ -146,4 +145,3 @@ CR_fnc_addRobberyActions = {
             _obj setVariable ["CR_actionsAdded", false]; // Freigeben, falls später Typ gesetzt wird
         };
     };
-};

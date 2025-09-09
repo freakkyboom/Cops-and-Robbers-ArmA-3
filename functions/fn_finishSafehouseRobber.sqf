@@ -7,4 +7,3 @@ if (!hasInterface || side player != civilian) exitWith {};
 
 if (!isNil "CR_robTaskSafehouse") then {
     CR_robTaskSafehouse setTaskState "Succeeded";
-};
