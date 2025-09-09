@@ -1,57 +1,45 @@
 /*
-    Mission configuration für das Cops‑and‑Robbers‑Framework.
-    Dieses File wird von Arma 3 beim Laden einer Mission eingelesen und
-    definiert grundlegende Parameter wie Respawnverhalten, Missionstitel
-    und verfügbarere Funktionsdateien.  Diese Vorlage ist bewusst
-    minimalistisch gehalten und kann beliebig angepasst und erweitert
-    werden.  Kommentare sind auf Deutsch, die SQF‑Syntax selbst
-    orientiert sich am Standard von Bohemia Interactive.
-
-    Die in diesem Repository enthaltenen Beispiele basieren auf
-    allgemein dokumentierten Mechaniken der Arma 3 Missionserstellung.
-    Der Bohemia‑Guide erklärt, dass Missionen in überschaubare
-    „Tasks“ (Aufgaben) aufgeteilt werden sollten und dass Aufgaben
-    verschiedene Zustände wie „created“, „assigned“, „succeeded“ oder
-    „failed“ haben【176927070815116†L340-L404】.  Dieses Framework nutzt
-    diese Konzepte, um klare Ziele für Räuber und Polizisten zu
-    definieren.
+    description.ext für die Cops‑and‑Robbers‑Mission.
+    Dieses File definiert grundlegende Missionsparameter, Respawnverhalten,
+    Funktionsregistrierung und RemoteExec‑Whitelist.
 */
 
 author      = "Modder";
 onLoadName  = "Cops and Robbers - Malden";
-onLoadMission = "Grundgerüst für einen Cops‑and‑Robbers‑Spielmodus auf Malden";
+onLoadMission = "Cops-and-Robbers-Spielmodus für ArmA 3";
 loadScreen  = "\A3\ui_f\data\map_backgrounds\background_terrain_ca.paa";
 
-// Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten (siehe editor‑Marker)
-respawn            = 3;        // 3 = BASE: Respawn an Marker mit dem Namen "respawn_west" usw.
-respawnDelay       = 3;
-respawnOnStart = -1;
+// Respawn‑Einstellungen: Spieler erscheinen an markierten Punkten
+respawn            = 3;        // 3 = BASE: Respawn an Marker respawn_west/respawn_civilian
+respawnDelay       = 5;
+respawnOnStart     = -1;
 respawnTemplates[] = {"MenuPosition","MenuInventory"};
-disabledAI = 1;                   // Falls nur Spieler
-enableDebugConsole = 1;           // 0 auf Live-Server
+disabledAI         = 1;         // KI deaktiviert; nur Spieler
+enableDebugConsole = 1;         // 0 auf produktivem Server
 
-// Grundlegende Missionsparameter
 class Header
 {
-    gameType   = "COOP";   // Koop‑Szenario; bei Bedarf ändern
+    gameType   = "COOP";    // Kooperative Mission
     minPlayers = 2;
     maxPlayers = 40;
 };
 
-// Verweise auf zusätzliche Konfigurationsdateien
+// Funktionsverzeichnis einbinden
 #include "CfgFunctions.hpp"
 
-
+// Remote‑Exec‑Whitelist
 class CfgRemoteExec
 {
     class Functions
     {
         mode = 2;
         jip = 1;
+
+        // Vanilla-Funktionen
         class BIS_fnc_endMission         { allowedTargets = 0; };
         class BIS_fnc_showNotification   { allowedTargets = 0; };
 
-        // Client-seitige UI Funktionen
+        // Client‑seitige Funktionen (UI/Interaktionen)
         class CR_fnc_addRobberyActions   { allowedTargets = 0; jip = 1; };
         class CR_fnc_addArsenalAction    { allowedTargets = 0; jip = 1; };
         class CR_fnc_addGarageActions    { allowedTargets = 0; jip = 1; };
@@ -59,16 +47,18 @@ class CfgRemoteExec
         class CR_fnc_openArsenal         { allowedTargets = 0; };
         class CR_fnc_robGasStation       { allowedTargets = 0; };
         class CR_fnc_robATM              { allowedTargets = 0; };
+        class CR_fnc_showID              { allowedTargets = 0; };
+        class CR_fnc_saySirenLocal       { allowedTargets = 0; };
 
-        // Task-Management
-        class CR_fnc_assignSafehouseTask { allowedTargets = 1; };
-        class CR_fnc_assignInterceptTask { allowedTargets = 1; };
-        class CR_fnc_finishSafehouseRobber { allowedTargets = 1; };
-        class CR_fnc_finishSafehouseCops { allowedTargets = 1; };
-        class CR_fnc_notifyCops          { allowedTargets = 1; };
-        class CR_fnc_robberyPreventedCops{ allowedTargets = 1; };
+        // Task‑Management (nur für Clients)
+        class CR_fnc_assignSafehouseTask      { allowedTargets = 1; };
+        class CR_fnc_assignInterceptTask      { allowedTargets = 1; };
+        class CR_fnc_finishSafehouseRobber    { allowedTargets = 1; };
+        class CR_fnc_finishSafehouseCops      { allowedTargets = 1; };
+        class CR_fnc_notifyCops               { allowedTargets = 1; };
+        class CR_fnc_robberyPreventedCops     { allowedTargets = 1; };
 
-        // Server-Only Funktionen
+        // Server‑seitige Logikfunktionen
         class CR_fnc_triggerAlarm        { allowedTargets = 2; };
         class CR_fnc_spawnVehicle        { allowedTargets = 2; };
         class CR_fnc_spawnGasLoot        { allowedTargets = 2; };
@@ -76,11 +66,7 @@ class CfgRemoteExec
         class CR_fnc_safehouseSuccess    { allowedTargets = 2; };
         class CR_fnc_startSiren          { allowedTargets = 2; };
         class CR_fnc_stopSiren           { allowedTargets = 2; };
-        class CR_fnc_saySirenLocal       { allowedTargets = 0; };
         class CR_fnc_explodeUnit         { allowedTargets = 2; };
-
-        // Globale Funktionen
-        class CR_fnc_showID              { allowedTargets = 0; };
     };
 
     class Commands
@@ -89,15 +75,14 @@ class CfgRemoteExec
         jip = 0;
     };
 };
-// Makro:
-#define F(fn,scope) class fn { allowedTargets = scope; };
-#define ANYONE 0
-#define CLIENT 1
-#define SERVER 2
-class CfgSounds {
-  class CR_Siren {
-    name = "CR_Siren";
-    sound[] = {"sounds\\siren.ogg", 3, 1, 150};
-    titles[] = {};
-  };
+
+// Sound‑Definitionen
+class CfgSounds
+{
+    class CR_Siren
+    {
+        name = "CR_Siren";
+        sound[] = {"sounds\\siren.ogg", 3, 1, 150};
+        titles[] = {};
+    };
 };
