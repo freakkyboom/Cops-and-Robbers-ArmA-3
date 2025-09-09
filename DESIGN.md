@@ -375,9 +375,10 @@ _unit addItemToUniform "ACE_moneyroll"; // Platzhalter
 
 ```sqf
 // utility: CR_fnc_onCooldown
-params ["_obj"];
-serverTime < (_obj getVariable ["CR_cdUntil", 0]);
-```
+CR_fnc_onCooldown = {
+    params ["_obj"];
+    serverTime < (_obj getVariable ["CR_cdUntil", 0]);
+};
 
 **Fence Sell (Server)**
 
