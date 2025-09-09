@@ -10,29 +10,23 @@
 
 params ["_obj"];
 
-if (!hasInterface) exitWith {};
 waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
+if (!hasInterface) exitWith {};
 
 private _type = _obj getVariable ["CR_target", ""];
 
 switch (_type) do
 {
-    case "gas":
-    {
+    case "gas": {
+        private _holder = if (_obj isKindOf "CAManBase") then {_obj} else {
+            (nearestObjects [_obj, ["CAManBase"], 5]) param [0, _obj]
+        };
         private _action = [
-            "robGasStation",
-            "Tankstelle ausrauben",
-            "",
-            {
-                params ["_target", "_player", "_args"];
-                if (side _player != civilian) exitWith {};
-                if (_target getVariable ["robbed", false]) exitWith { hint "Bereits ausgeraubt"; };
-                _target setVariable ["robbed", true, true];
-                [_target, _player] call CR_fnc_robGasStation;
-            },
-            { true }
+          "robGasStation","Tankstelle ausrauben","",
+          { params ["_target","_player"]; [_target,_player] call CR_fnc_robGasStation; },
+          { true }
         ] call ace_interact_menu_fnc_createAction;
-        [_obj, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
+        [_holder, 0, ["ACE_MainActions"], _action] call ace_interact_menu_fnc_addActionToObject;
     };
     case "atm":
     {

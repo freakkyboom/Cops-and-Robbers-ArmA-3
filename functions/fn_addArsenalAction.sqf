@@ -6,8 +6,8 @@
         1: SIDE   - Fraktion, die Zugriff hat
 */
 
-if (!hasInterface) exitWith {};
 waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
+if (!hasInterface) exitWith {};
 params ["_box", "_side"];
 if (side player != _side) exitWith {};
 

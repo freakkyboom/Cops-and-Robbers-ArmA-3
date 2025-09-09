@@ -6,8 +6,8 @@
     Rollenspielgespräche zwischen Polizisten und Räubern fördern.
 */
 
-if (!hasInterface) exitWith {};
 waitUntil { !isNil "ace_interact_menu_fnc_createAction" };
+if (!hasInterface) exitWith {};
 
 private _action = [
     "showID",

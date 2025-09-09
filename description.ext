@@ -53,6 +53,8 @@ class CfgRemoteExec
         class CR_fnc_addGarageActions    { allowedTargets = 0; jip = 1; };
         class CR_fnc_addLaptopAction     { allowedTargets = 0; jip = 1; };
         class CR_fnc_openArsenal         { allowedTargets = 0; };
+        class CR_fnc_robGasStation       { allowedTargets = 0; };
+        class CR_fnc_robATM              { allowedTargets = 0; };
 
         // Task-Management
         class CR_fnc_assignSafehouseTask { allowedTargets = 1; };
@@ -68,6 +70,10 @@ class CfgRemoteExec
         class CR_fnc_spawnGasLoot        { allowedTargets = 2; };
         class CR_fnc_postGasRobbery      { allowedTargets = 2; };
         class CR_fnc_safehouseSuccess    { allowedTargets = 2; };
+        class CR_fnc_startSiren          { allowedTargets = 2; };
+        class CR_fnc_stopSiren           { allowedTargets = 2; };
+        class CR_fnc_saySirenLocal       { allowedTargets = 0; };
+        class CR_fnc_explodeUnit         { allowedTargets = 2; };
 
         // Globale Funktionen
         class CR_fnc_showID              { allowedTargets = 0; };
@@ -78,4 +84,12 @@ class CfgRemoteExec
         mode = 0;
         jip = 0;
     };
+};
+
+class CfgSounds {
+  class CR_Siren {
+    name = "CR_Siren";
+    sound[] = {"sounds\\siren.ogg", 3, 1, 150};
+    titles[] = {};
+  };
 };
