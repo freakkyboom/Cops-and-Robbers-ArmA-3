@@ -37,6 +37,8 @@ class Header
 
 // Verweise auf zusätzliche Konfigurationsdateien
 #include "CfgFunctions.hpp"
+disabledAI = 1;                   // Falls nur Spieler
+enableDebugConsole = 1;           // 0 auf Live-Server
 
 class CfgRemoteExec
 {
