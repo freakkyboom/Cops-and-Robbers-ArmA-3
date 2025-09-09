@@ -1,6 +1,6 @@
 # CnR:NG → ArmA 3 (ACE³/CBA) — Design & Implementation Plan
 
-**Projektziel**: Ein „Cops & Robbers“-Szenario in ArmA 3, angelehnt an CnR:NG-Mechaniken (Robberies, Heists, Trucking, Skills, Police/Medic Gameplay), umgesetzt mit **ACE³** (Interaktionsframework), **CBA** (Events/Settings), optional **RHS/NiArms** (Content), persistenter Ökonomie (iniDB2/extDB3) und klarer Server/Client-Trennung.
+
 
 ---
 
@@ -22,19 +22,19 @@
 
    * Tankstellenraub per NPC/Objekt („Ausrauben“, 150 s Progress).
    * ATM-Hack (Tool benötigt), Tresor-Interaktion (Schneidbrenner/Sprengsatz Gate).
+
 3. **Alarm-/Benachrichtigungssystem**: Startet Robbery → setzt Marker + Broadcast an Cops, Throttle & Cooldowns.
 4. **Beutecontainer**: Kiste spawnt beim Erfolg; Transport zum **Fence/Safehouse** gegen Geld.
 5. **Polizei-Mechaniken**: Festnehmen/Abführen, Ticketieren, Jail (45–180 s), Beute beschlagnahmen.
 6. **Ökonomie (basic)**: Cash, Item-Preise, Heist-Belohnungen, simple Marktparameter.
-7. **Persistenz (optional in Phase 1)**: iniDB2 (schnell), später extDB3/MySQL.
+
 
 ---
 
 ## 3) Mods & Tech-Stack
 
 * **Hard**: CBA_A3, ACE³ (Interaction, Medical light, Explosives, Logistics, ProgressBar APIs).
-* **Optional**: RHS/NiArms (Gear/Weapons), Task Force/ACRE (Funk), Community Skins.
-* **Persistenz**: iniDB2 → extDB3 (Migrationpfad beachten).
+
 
 ---
 
@@ -127,11 +127,6 @@ class CfgRemoteExec {
 [] call CR_fnc_initRobberyTargets;
 publicVariable "CR_RobberySites"; // [{obj, type, name, cooldown}, ...]
 
-CR_Economy = call compile preprocessFileLineNumbers "config/economy.sqf"; // optional - consider using CBA settings or a .hpp include instead
-=======
-CR_Economy = call compile preprocessFileLineNumbers "config\economy.sqf"; // optional
-
-```
 
 **initPlayerLocal.sqf (Ausschnitt)**
 
@@ -277,14 +272,6 @@ _lvl >= 1;
 
 ---
 
-## 10) Persistenz
-
-**Phase 1**: iniDB2 (Accounts keyed by SteamID, Felder: cash, skills, jail_time, crimes, inventory).
-**Phase 2**: extDB3 (MySQL), Tabellen: `players`, `skills`, `economy_history`, `robberies`, `police_actions`.
-
----
-
-## 11) Trucking (Phase 2 Entwurf)
 
 * **Jobboard**: Terminalobjekte mit ACE-„Trucking-Jobs ansehen“ → Liste generierter Routen (Start-Hub → Ziel, Gütertyp, Zeitlimit, Bonus).
 * **Dynamischer Markt**: Güterpreise ±%/Zeit, seltene „Urgent Cargo“. Skills gates (Driver-Level) für Spezialaufträge.
@@ -292,114 +279,9 @@ _lvl >= 1;
 
 ---
 
-## 12) Siegezonen & Dome (optional)
+
 
 * Bank/Heist-Orte in „Siege“-Triggern: Inside → bestimmte Regeln (z. B. Waffen erlaubt, Timer, Respawn-Block).
 * Visual: Dome/Marker, Audio-Cues.
 
 ---
-
-## 13) Testing-Plan
-
-1. **Unit Tests**: Lokal Robbery-Start/Abbruch, Cooldowns, Marker.
-2. **MP-JIP**: Join-in-Progress korrekt (Marker/Busy-Status/Persistenz).
-3. **Balance**: Zeiten & Payouts anpassen; Heat/Police-Reaction-Tuning.
-4. **Security**: RemoteExec-Whitelist, Anti-Exploit (Spam, Dupes, Teleport, Gearfarm).
-
----
-
-## 14) Roadmap
-
-* **Sprint 1 (MVP)**: Spawns, ACE-Interaktionen, Tankstellen/ATM/Tresor, Alarme, Kiste, Cops-Arrest/Ticket/Jail, Basiseconomy.
-* **Sprint 2**: Persistenz (iniDB2), Fence/Safehouse, Heat/Manhunt, Cop-Reputation, einfache Daily Events.
-* **Sprint 3**: Trucking-Board, Gütermarkt, Driver-Skill, Achievements.
-* **Sprint 4**: High-Tier Heists (Bank/Jewelry/Warehouse), Siegezonen, Dome, Anti-Missbrauch.
-
----
-
-## 15) mission.sqm — Benannte Objekte/Marker (Pflicht)
-
-* NPCs/Objekte: `cr_gas_*`, `cr_atm_*`, `cr_safe_*`, `cr_fence_01` (Fence/Safehouse), `cr_pd_*` (Police-Stützpunkte).
-* Marker: `cr_spawn_cop_1..3`, `cr_spawn_civ_1..3`.
-* Optional Hubs: `cr_truckhub_*` (Phase 2).
-
----
-
-## 16) CBA Settings (cba_settings.sqf, Beispiele)
-
-```sqf
-// ACE Interaction Keybinds usw. nur Beispiel — final im Spiel ändern
-force force ace_interaction_enableTeamManagement = true;
-force force ace_medical_level = 1; // Basic
-force force ace_frag_reflectionsEnabled = 1;
-```
-
----
-
-## 17) Known Good Patterns & Stolperfallen
-
-* ACE-Action-Code läuft **clientseitig** (UI) — serverseitige Autorität für state changes (robbery, payouts).
-* JIP: `setVariable public` + Replays (onPlayerConnected → Sync Busy/Cooldowns).
-* RemoteExec strikt whitelisten; keine `call compile` aus Clientdaten.
-* Progressbars/Cancel: Abstand/Line-of-sight check, Combat-Interrupt.
-* **Performance**: Keine OnEachFrame-Schleifen für triviale Checks; Timers/Triggers nutzen.
-
----
-
-## 18) To‑Do (für GitHub Issues)
-
-* [ ] ACE-Aktions-Wrapper + Utilitys (`CR_fnc_addAction`, `CR_fnc_canRob`)
-* [ ] Robbery-Core (start/finish/fail) + Notify-System
-* [ ] Economy-Table & Payouts
-* [ ] Police: Arrest/Jail/Ticket + Confiscate
-* [ ] LootCrate-Spawner + Fence-Sell
-* [ ] CBA Settings Baseline
-* [ ] mission.sqm: Platzhalter-Objekte/Marker benennen
-* [ ] Persistenz (iniDB2) optional
-* [ ] Trucking Phase 2 Scaffolding
-
----
-
-## 19) Appendix — Mini‑Snippets
-
-**Economy Payout**
-
-```sqf
-// CR_fnc_economy_payout.sqf
-params ["_unit","_type"];
-private _base = switch (_type) do {case "GAS": 1200; case "ATM": 2500; case "SAFE": 4000; default {1000};};
-private _heat = missionNamespace getVariable ["CR_heat",1];
-private _pay  = round (_base * _heat);
-_unit addRating 100; // flavor
-_unit addItemToUniform "ACE_moneyroll"; // Platzhalter
-[_unit, _pay] call CR_fnc_addCash; // implementieren
-```
-
-**Cooldown Utility**
-
-```sqf
-// utility: CR_fnc_onCooldown
-
-CR_fnc_onCooldown = {
-    params ["_obj"];
-    serverTime < (_obj getVariable ["CR_cdUntil", 0]);
-};
-=======
-params ["_obj"];
-serverTime < (_obj getVariable ["CR_cdUntil", 0]);
-```
-
-
-**Fence Sell (Server)**
-
-```sqf
-params ["_crate","_player"];
-private _val = (_crate getVariable ["CR_lootValue", 0]);
-[_player, _val] call CR_fnc_addCash;
-deleteVehicle _crate;
-```
-
----
-
-**Fazit**: Dieses Dokument ist die Blaupause. Als nächstes: Issue‑Board füllen, dann Sprint 1 sauber umsetzen. Danach Persistenz und Trucking 2.0. ArmA lebt — und jetzt kriegt’s frische CnR‑Mechaniken.
-

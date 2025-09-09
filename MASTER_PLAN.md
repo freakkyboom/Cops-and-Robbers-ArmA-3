@@ -11,9 +11,7 @@ Following these resources ensures that scripting patterns, network behaviour and
 
 ## 2. Milestones
 1. **MVP** – faction spawns, robbery interactions, notifications, loot crates, basic police mechanics and economy.
-2. **Persistence Layer** – iniDB2 integration and later migration to extDB3.
-3. **Trucking & Advanced Economy** – dynamic job board, market pricing and driver skills.
-4. **High‑Tier Heists & Siege Zones** – bank/jewelry targets, zone rules and anti‑abuse measures.
+
 
 Each milestone is delivered in iterative sprints, adhering to the guidelines above for scripting standards and network security.
 
