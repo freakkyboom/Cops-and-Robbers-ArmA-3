@@ -1,19 +1,8 @@
 /*
     File: functions/fn_setupTeams.sqf
     Author: CR Framework
-
-    Zweck
-    -----
-    - Serverseitig: Spawns/Marker nach Namenskonvention einsammeln, global publizieren,
-      Arsenal- & Garagen-Interaktionen an bereits platzierte Objekte binden.
-    - Clientseitig: Seitenabhängige Respawn-Positionen (BIS_fnc_addRespawnPosition) registrieren
-      und JIP-sicher halten.
-
-    Marker-Namenskonvention (beliebig viele, lückenlos oder mit Lücken):
-      - Cops (BLUFOR/west):  cop_spawn_1, cop_spawn_2, cop_spawn_3, ...
-        Fallbacks: respawn_west, cop_spawn
-      - Robbers (CIV/civilian): robber_spawn_1, robber_spawn_2, robber_spawn_3, ...
-        Fallbacks: respawn_civilian, robber_spawn
+    
+    KRITISCHER FIX: Suche nach Objekten über Attribut-Namen UND vehicleVarName
 */
 params [
     ["_mode", ""],
@@ -67,44 +56,115 @@ params [
     };
 
     private _bindInteractionsServer = {
-        // Arsenal-/Garage-Objekte anhand globaler Variablen binden
-        // KORREKTUR: mission.sqm zeigt "cop_arsenal" und "robber_arsenal" als Objektnamen
+        // KRITISCHER FIX: Verbesserte Objektsuche
         private _allObjects = allMissionObjects "All";
         
-        // Finde Arsenal-Objekte
+        diag_log "[CR] Starting interaction binding...";
+        diag_log format ["[CR] Total objects found: %1", count _allObjects];
+        
+        // Finde Arsenal-Objekte - ERWEITERTE SUCHE
         private _copArsenalObj = objNull;
         private _robArsenalObj = objNull;
-        
-        {
-            private _varName = vehicleVarName _x;
-            if (_varName == "cop_arsenal") then { _copArsenalObj = _x; };
-            if (_varName == "robber_arsenal") then { _robArsenalObj = _x; };
-        } forEach _allObjects;
-
-        if (!isNull _copArsenalObj) then {
-            [_copArsenalObj, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
-        };
-
-        if (!isNull _robArsenalObj) then {
-            [_robArsenalObj, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
-        };
-
-        // Finde Vehicle-Spawn-Pads
         private _copVehPad = objNull;
         private _robVehPad = objNull;
         
         {
             private _varName = vehicleVarName _x;
-            if (_varName == "cop_vehicle_spawn") then { _copVehPad = _x; };
-            if (_varName == "robber_vehicle_spawn") then { _robVehPad = _x; };
+            
+            // Logge alle benannten Objekte für Debug
+            if (_varName != "") then {
+                diag_log format ["[CR] Found named object: varName=%1, type=%2, pos=%3", _varName, typeOf _x, getPosATL _x];
+            };
+            
+            // Prüfe vehicleVarName
+            if (_varName == "cop_arsenal") then { 
+                _copArsenalObj = _x;
+                diag_log format ["[CR] Found cop_arsenal via vehicleVarName: %1", _x];
+            };
+            if (_varName == "robber_arsenal") then { 
+                _robArsenalObj = _x;
+                diag_log format ["[CR] Found robber_arsenal via vehicleVarName: %1", _x];
+            };
+            if (_varName == "cop_vehicle_spawn") then { 
+                _copVehPad = _x;
+                diag_log format ["[CR] Found cop_vehicle_spawn via vehicleVarName: %1", _x];
+            };
+            if (_varName == "robber_vehicle_spawn") then { 
+                _robVehPad = _x;
+                diag_log format ["[CR] Found robber_vehicle_spawn via vehicleVarName: %1", _x];
+            };
+            
         } forEach _allObjects;
+        
+        // FALLBACK: Suche über Marker-Positionen wenn vehicleVarName nicht funktioniert
+        if (isNull _copArsenalObj && markerExists "cop_arsenal") then {
+            private _markerPos = getMarkerPos "cop_arsenal";
+            private _nearObjs = nearestObjects [_markerPos, ["I_E_CargoNet_01_ammo_F", "I_CargoNet_01_ammo_F", "Box_NATO_Ammo_F"], 10];
+            if (count _nearObjs > 0) then {
+                _copArsenalObj = _nearObjs select 0;
+                // WICHTIG: vehicleVarName setzen für zukünftige Referenzen
+                _copArsenalObj setVehicleVarName "cop_arsenal";
+                diag_log format ["[CR] Found cop_arsenal via marker position fallback: %1", _copArsenalObj];
+            };
+        };
+        
+        if (isNull _robArsenalObj && markerExists "robber_arsenal") then {
+            private _markerPos = getMarkerPos "robber_arsenal";
+            private _nearObjs = nearestObjects [_markerPos, ["I_CargoNet_01_ammo_F", "I_E_CargoNet_01_ammo_F", "Box_NATO_Ammo_F"], 10];
+            if (count _nearObjs > 0) then {
+                _robArsenalObj = _nearObjs select 0;
+                _robArsenalObj setVehicleVarName "robber_arsenal";
+                diag_log format ["[CR] Found robber_arsenal via marker position fallback: %1", _robArsenalObj];
+            };
+        };
+        
+        if (isNull _copVehPad && markerExists "cop_vehicle_spawn") then {
+            private _markerPos = getMarkerPos "cop_vehicle_spawn";
+            private _nearObjs = nearestObjects [_markerPos, ["I_E_CargoNet_01_ammo_F", "I_CargoNet_01_ammo_F", "Box_NATO_Ammo_F"], 10];
+            if (count _nearObjs > 0) then {
+                _copVehPad = _nearObjs select 0;
+                _copVehPad setVehicleVarName "cop_vehicle_spawn";
+                diag_log format ["[CR] Found cop_vehicle_spawn via marker position fallback: %1", _copVehPad];
+            };
+        };
+        
+        if (isNull _robVehPad && markerExists "robber_vehicle_spawn") then {
+            private _markerPos = getMarkerPos "robber_vehicle_spawn";
+            private _nearObjs = nearestObjects [_markerPos, ["I_CargoNet_01_ammo_F", "I_E_CargoNet_01_ammo_F", "Box_NATO_Ammo_F"], 10];
+            if (count _nearObjs > 0) then {
+                _robVehPad = _nearObjs select 0;
+                _robVehPad setVehicleVarName "robber_vehicle_spawn";
+                diag_log format ["[CR] Found robber_vehicle_spawn via marker position fallback: %1", _robVehPad];
+            };
+        };
+
+        // Jetzt die Aktionen hinzufügen
+        if (!isNull _copArsenalObj) then {
+            diag_log format ["[CR] Adding arsenal action to cop_arsenal: %1", _copArsenalObj];
+            [_copArsenalObj, west] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+        } else {
+            diag_log "[CR][WARNING] cop_arsenal object not found!";
+        };
+
+        if (!isNull _robArsenalObj) then {
+            diag_log format ["[CR] Adding arsenal action to robber_arsenal: %1", _robArsenalObj];
+            [_robArsenalObj, civilian] remoteExec ["CR_fnc_addArsenalAction", 0, true];
+        } else {
+            diag_log "[CR][WARNING] robber_arsenal object not found!";
+        };
 
         if (!isNull _copVehPad) then {
+            diag_log format ["[CR] Adding garage actions to cop_vehicle_spawn: %1", _copVehPad];
             [_copVehPad, west] remoteExec ["CR_fnc_addGarageActions", 0, true];
+        } else {
+            diag_log "[CR][WARNING] cop_vehicle_spawn object not found!";
         };
 
         if (!isNull _robVehPad) then {
+            diag_log format ["[CR] Adding garage actions to robber_vehicle_spawn: %1", _robVehPad];
             [_robVehPad, civilian] remoteExec ["CR_fnc_addGarageActions", 0, true];
+        } else {
+            diag_log "[CR][WARNING] robber_vehicle_spawn object not found!";
         };
     };
 
