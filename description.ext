@@ -63,6 +63,7 @@ class CfgRemoteExec
         class CR_fnc_spawnVehicle        { allowedTargets = 2; };
         class CR_fnc_spawnGasLoot        { allowedTargets = 2; };
         class CR_fnc_postGasRobbery      { allowedTargets = 2; };
+        class CR_fnc_startRobberyServer  { allowedTargets = 2; };
         class CR_fnc_safehouseSuccess    { allowedTargets = 2; };
         class CR_fnc_startSiren          { allowedTargets = 2; };
         class CR_fnc_stopSiren           { allowedTargets = 2; };

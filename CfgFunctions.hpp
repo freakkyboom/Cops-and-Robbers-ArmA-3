@@ -43,6 +43,7 @@ class CfgFunctions
             class triggerAlarm {};          // fn_triggerAlarm.sqf
             class notifyCops {};            // fn_notifyCops.sqf
             class robberyPreventedCops {};  // fn_robberyPreventedCops.sqf
+            class startRobberyServer {};    // fn_startRobberyServer.sqf
         };
 
         // --- Polizei / Einsatzmittel ---
