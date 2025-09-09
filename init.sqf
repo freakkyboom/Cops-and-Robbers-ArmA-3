@@ -6,8 +6,8 @@
       - Client: Aufgaben + RP-Interaktionen
       - Respawn-Handling (Interaktionen/Tasks erneuern)
 
-    Voraussetzungen (aus der Mission / Repo):
-      - description.ext inkludiert CfgFunctions.hpp und CfgRemoteExec ist korrekt gesetzt
+    Voraussetzungen:
+      - description.ext inkludiert CfgFunctions.hpp & CfgRemoteExec
       - Folgende Funktionen existieren:
           CR_fnc_setupTeams           (SERVER)
           CR_fnc_initRobberyTargets   (SERVER)
@@ -17,87 +17,89 @@
 
 scriptName "init.sqf";
 
-// --- Grundwartezeiten: Engine/Player bereit
-// dedizierter Server hat kein player-Objekt; Clients warten auf player
+// --- Clientseitiger Block (inkl. JIP & ACE-Check)
 if (hasInterface) then {
+    // Warte auf Engine/Player
     waitUntil { !isNull player && player == player };
-};
 
-// Warte bis Simulationszeit > 0 (verhindert sehr frühe Aufrufe bei JIP)
-waitUntil { time >= 0 };
+    // Warte auf Simulationszeit > 0
+    waitUntil { time >= 0 };
 
-// --- Serverseitiges Setup (einmalig)
-if (isServer) then {
-    // Teams/Spawns/Grundausrüstung etc.
-    try {
-        [] call CR_fnc_setupTeams;
-    } catch {
-        diag_log format ["[CR][ERROR] setupTeams failed: %1", _exception];
+    // Warte auf ACE oder Timeout nach 30 Sekunden
+    private _startTime = time;
+    waitUntil {
+        (
+            isClass (configFile >> "CfgPatches" >> "ace_main")
+            && { !isNil "ace_interact_menu_fnc_createAction" }
+        ) || { (time - _startTime) > 30 }
     };
 
-    // Robbery-Ziele (NPC/ATM/Tresor) aus mission.sqm erfassen und ACE-Aktionen global verteilen (JIP-fähig)
-    try {
-        [] call CR_fnc_initRobberyTargets;
-    } catch {
-        diag_log format ["[CR][ERROR] initRobberyTargets failed: %1", _exception];
-    };
-};
-
-// --- Clientseitiges Setup (pro Spieler, inkl. JIP)
-if (hasInterface) then {
-    // (Optional) auf ACE warten, sofern Interaktionen immediate ACE benötigen
-    // Falls eure Funktionen bereits intern warten, kann dieser Block entfallen.
-    private _aceReady = {
-        // ACE vorhanden & Interact-API verfügbar?
-        isClass (configFile >> "CfgPatches" >> "ace_main")
-        && { !isNil "ace_interact_menu_fnc_createAction" }
-    };
-    waitUntil { _aceReady() };
-
-    // Tasks (police/robbers) hinzufügen
+    // Aufgaben zuweisen
     try {
         [] call CR_fnc_assignTasks;
     } catch {
-        diag_log format ["[CR][ERROR] assignTasks failed for %1: %2", name player, _exception];
+        diag_log format ["[CR][ERROR] assignTasks failed for %1", name player];
     };
 
-    // RP-Interaktionen (ID zeigen, Laptops, Arsenal/Garage-Menüs, etc.)
+    // RP-Interaktionen hinzufügen
     try {
         [] call CR_fnc_addRPInteractions;
     } catch {
-        diag_log format ["[CR][ERROR] addRPInteractions failed for %1: %2", name player, _exception];
+        diag_log format ["[CR][ERROR] addRPInteractions failed for %1", name player];
     };
 
-    // --- Respawn-Handling: Interaktionen/Tasks neu aufsetzen
-    //   Hinweis: createSimpleTask-Objekte sind spielergebunden; bei Respawn ggf. neu zuweisen.
-    //   Wenn ihr persistente Tasks nutzt, passt das je nach Logik an.
-    player addEventHandler ["Respawn", {
-        params ["_unit", "_corpse"];
+    // Respawn-EventHandler einmalig registrieren
+    if (isNil "CR_RespawnHandlerAdded") then {
+        player addEventHandler ["Respawn", {
+            params ["_unit", "_corpse"];
 
-        // ACE Verfügbarkeit erneut prüfen (bei schnellem Respawn)
-        private _reWait = {
-            isClass (configFile >> "CfgPatches" >> "ace_main")
-            && { !isNil "ace_interact_menu_fnc_createAction" }
-        };
-        waitUntil { _reWait() };
+            // Warte auf ACE erneut oder Timeout
+            private _respawnStart = time;
+            waitUntil {
+                (
+                    isClass (configFile >> "CfgPatches" >> "ace_main")
+                    && { !isNil "ace_interact_menu_fnc_createAction" }
+                ) || { (time - _respawnStart) > 30 }
+            };
 
-        // Tasks/Interaktionen nach Respawn wiederherstellen
-        try {
-            [] call CR_fnc_assignTasks;
-        } catch {
-            diag_log format ["[CR][ERROR] assignTasks (respawn) failed for %1: %2", name _unit, _exception];
-        };
+            // Aufgaben & Interaktionen neu setzen
+            try {
+                [] call CR_fnc_assignTasks;
+            } catch {
+                diag_log format ["[CR][ERROR] assignTasks (respawn) failed for %1", name _unit];
+            };
 
-        try {
-            [] call CR_fnc_addRPInteractions;
-        } catch {
-            diag_log format ["[CR][ERROR] addRPInteractions (respawn) failed for %1: %2", name _unit, _exception];
-        };
-    }];
+            try {
+                [] call CR_fnc_addRPInteractions;
+            } catch {
+                diag_log format ["[CR][ERROR] addRPInteractions (respawn) failed for %1", name _unit];
+            };
+        }];
+        CR_RespawnHandlerAdded = true;
+    };
 };
 
-// --- Headless Client: hier keine Logik nötig, außer ihr nutzt HC für AI/Serverlast.
-// if (!hasInterface && !isServer) then { /* HC-spezifisches Setup hier (optional) */ };
+// --- Serverseitiges Setup (einmalig)
+if (isServer) then {
+    try {
+        [] call CR_fnc_setupTeams;
+    } catch {
+        diag_log "[CR][ERROR] setupTeams failed.";
+    };
 
-// --- Fertig
+    try {
+        [] call CR_fnc_initRobberyTargets;
+    } catch {
+        diag_log "[CR][ERROR] initRobberyTargets failed.";
+    };
+};
+
+// --- Headless Client-Setup (optional)
+/*
+if (!hasInterface && !isServer) then {
+    // HC-spezifisches Setup hier
+};
+*/
+
+// --- Setup abgeschlossen
 diag_log "[CR] init.sqf completed.";
