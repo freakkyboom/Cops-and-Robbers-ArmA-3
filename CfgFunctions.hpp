@@ -36,9 +36,13 @@ class CfgFunctions
             file = "functions";
             class robGasStation {};         // fn_robGasStation.sqf
             class robATM {};                // fn_robATM.sqf
+            class robJewelry {};           // fn_robJewelry.sqf
+            class robWarehouse {};         // fn_robWarehouse.sqf
             class startRobbery {};          // fn_startRobbery.sqf
             class pickupLoot {};            // fn_pickupLoot.sqf
             class spawnGasLoot {};          // fn_spawnGasLoot.sqf
+            class spawnJewelryLoot {};      // fn_spawnJewelryLoot.sqf
+            class spawnWarehouseLoot {};    // fn_spawnWarehouseLoot.sqf
             class postGasRobbery {};        // fn_postGasRobbery.sqf
             class triggerAlarm {};          // fn_triggerAlarm.sqf
             class notifyCops {};            // fn_notifyCops.sqf

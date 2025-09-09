@@ -1,7 +1,7 @@
 /*
     Datei: functions/fn_addRobberyActions.sqf
     Funktion: CR_fnc_addRobberyActions
-    Zweck: Fügt einem Zielobjekt (Tankstelle/ATM/Tresor) passende ACE-Aktionen hinzu.
+    Zweck: Fügt einem Zielobjekt (Tankstelle/ATM/Tresor/Juwelier/Lagerhalle) passende ACE-Aktionen hinzu.
     Aufruf: [_obj] remoteExec ["CR_fnc_addRobberyActions", 0, true];  // vom Server aus
 */
 
@@ -29,6 +29,8 @@ CR_fnc_addRobberyActions = {
         if (_lname select [0,12] isEqualTo "gas_station_") then { _type = "gas"; };
         if (_lname select [0,4]  isEqualTo "atm_")          then { _type = "atm"; };
         if (_lname select [0,6]  isEqualTo "vault_")        then { _type = "vault"; };
+        if (_lname select [0,8]  isEqualTo "jewel_" )       then { _type = "jewelry"; };
+        if (_lname select [0,10] isEqualTo "warehouse")    then { _type = "warehouse"; };
     };
 
     // Hilfsfunktion: Aktion hinzufügen
@@ -111,6 +113,32 @@ CR_fnc_addRobberyActions = {
                 ([_tgt,_pl] call _condCivilNear) && { !(_tgt getVariable ["robbed", false]) }
             };
             [_obj, "CR_robVault", "Tresor knacken", _onExec, _cond] call _addActionTo;
+        };
+
+        case "jewelry": {
+            private _onExec = {
+                params ["_tgt","_pl"];
+                if (_tgt getVariable ["robbed", false]) exitWith { ["Bereits geplündert",2] call ace_common_fnc_displayTextStructured; };
+                [_tgt, _pl] call CR_fnc_robJewelry;
+            };
+            private _cond = {
+                params ["_tgt","_pl"];
+                ([_tgt,_pl] call _condCivilNear) && { !(_tgt getVariable ["robbed", false]) }
+            };
+            [_obj, "CR_robJewelry", "Juwelier ausrauben", _onExec, _cond] call _addActionTo;
+        };
+
+        case "warehouse": {
+            private _onExec = {
+                params ["_tgt","_pl"];
+                if (_tgt getVariable ["robbed", false]) exitWith { ["Bereits geplündert",2] call ace_common_fnc_displayTextStructured; };
+                [_tgt, _pl] call CR_fnc_robWarehouse;
+            };
+            private _cond = {
+                params ["_tgt","_pl"];
+                ([_tgt,_pl] call _condCivilNear) && { !(_tgt getVariable ["robbed", false]) }
+            };
+            [_obj, "CR_robWarehouse", "Lagerhalle plündern", _onExec, _cond] call _addActionTo;
         };
 
         default {

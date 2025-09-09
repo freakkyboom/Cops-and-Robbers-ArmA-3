@@ -5,7 +5,7 @@
     Zweck:
       - Scannt Missionsobjekte (NPCs/Objekte) und erkennt Raub-Ziele anhand Namensschema
         bzw. gesetzter Variablen.
-      - Unterstützte Typen: "gas", "atm", "vault".
+      - Unterstützte Typen: "gas", "atm", "vault", "jewelry", "warehouse".
       - Markiert Ziele mit Variablen, baut eine Server-Cacheliste und verteilt ACE-Aktionen
         JIP-sicher an alle Clients.
 
@@ -13,6 +13,8 @@
       gas_station_*   -> Tankstellen-Ziele (NPC oder Objekt in der Nähe)
       atm_*           -> Geldautomaten
       vault_*         -> Tresor
+      jewel_*         -> Juwelier
+      warehouse_*     -> Lagerhalle
 
     Multiplayer:
       - Server-only Scan & Cache, Verteilung via remoteExec (JIP=true).
@@ -57,11 +59,15 @@ CR_fnc_initRobberyTargets = {
         if (_lname find "gas_station_" isEqualTo 0) exitWith { "gas" };
         if (_lname find "atm_"          isEqualTo 0) exitWith { "atm" };
         if (_lname find "vault_"        isEqualTo 0) exitWith { "vault" };
+        if (_lname find "jewel_"       isEqualTo 0) exitWith { "jewelry" };
+        if (_lname find "warehouse_"   isEqualTo 0) exitWith { "warehouse" };
 
         // Klassenbasierte Heuristiken (optional, erweiterbar)
         if (_cls find "atm" > -1)      exitWith { "atm" };
         if (_cls find "fuel" > -1)     exitWith { "gas" };
         if (_cls find "vault" > -1)    exitWith { "vault" };
+        if (_cls find "jewel" > -1)    exitWith { "jewelry" };
+        if (_cls find "warehouse" > -1) exitWith { "warehouse" };
 
         "" // unbekannt
     };
