@@ -14,7 +14,7 @@
     umgesetzt, indem sowohl Räuber als auch Polizisten eigene Tasks
     erhalten.
 */
-
+waitUntil { !isNull player && player == player };
 if (isServer) then
 {
     // Serverseitige Team‑ und Fahrzeugvorbereitung
