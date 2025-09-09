@@ -126,7 +126,7 @@ class CfgRemoteExec {
 [] call CR_fnc_setupTeams;
 [] call CR_fnc_initRobberyTargets;
 publicVariable "CR_RobberySites"; // [{obj, type, name, cooldown}, ...]
-CR_Economy = call compile preprocessFileLineNumbers "config\economy.sqf"; // optional
+CR_Economy = call compile preprocessFileLineNumbers "config/economy.sqf"; // optional - consider using CBA settings or a .hpp include instead
 ```
 
 **initPlayerLocal.sqf (Ausschnitt)**
