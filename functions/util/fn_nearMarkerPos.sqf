@@ -3,4 +3,4 @@
 */
 params ["_markerName"];
 if (isNil { getMarkerPos _markerName }) exitWith { [false, [0,0,0]] };
-[true, getMarkerPos _markerName]
+[true, getMarkerPos _markerName];

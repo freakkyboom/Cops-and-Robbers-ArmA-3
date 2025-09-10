@@ -44,7 +44,7 @@ private _createTask = {
 
     _owner setVariable [_taskId, _task, false];
 
-    true
+    true;
 };
 
 // Spielerrolle bestimmen
@@ -110,4 +110,4 @@ if (_isCop) then {
 };
 
 // Erfolg
-true
+true;
